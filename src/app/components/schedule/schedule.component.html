@@ -1,0 +1,19 @@
+<ion-content (swipe)="onSwipe($event)">
+    <ion-segment [(ngModel)]="defaultView" color="primary">
+        <ion-segment-button value="agendaDay" (ionSelect)="selectView('agendaDay')">
+            Jour
+        </ion-segment-button>
+        <ion-segment-button value="agendaWeek" (ionSelect)="selectView('agendaWeek')">
+            Semaine
+        </ion-segment-button>
+        <ion-segment-button value="month" (ionSelect)="selectView('month')">
+            Mois
+        </ion-segment-button>
+    </ion-segment>
+    <div class="calendar-container">
+        <div [attr.style]="style" id="calendar" [attr.class]="styleClass"></div>
+    </div>
+    <ion-fab bottom right>
+        <button (click)="today()" ion-fab><ion-icon name="calendar" ></ion-icon></button>
+    </ion-fab>
+</ion-content>

@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }   from '@angular/forms';
 import {platformBrowserDynamic} from "@angular/platform-browser-dynamic";
 import { HttpModule }    from '@angular/http';
-import {ScheduleModule} from 'primeng/primeng';
 
 
 import { MyApp } from './app.component';
@@ -13,6 +12,7 @@ import { MyApp } from './app.component';
 import { CalendarPage } from '../pages/calendar/calendar';
 import { LoginPage } from '../pages/login/login';
 import { LogoutPage } from '../pages/logout/logout';
+import { SettingsPage } from '../pages/settings/settings';
 
 // Services
 import { LoginService } from './services/login.service';
@@ -23,6 +23,7 @@ import { localStorageService } from './services/localstorage.service';
 
 // Components
 import { MenuComponent } from './components/menu.component';
+import { SchedulerComponent } from './components/schedule/schedule.component';
 
 
 @NgModule({
@@ -31,26 +32,29 @@ import { MenuComponent } from './components/menu.component';
     CalendarPage,
     LoginPage,
     LogoutPage,
-    MenuComponent
+    SettingsPage,
+    MenuComponent,
+    SchedulerComponent
   ],
   imports: [
     IonicModule.forRoot(MyApp),
     BrowserModule,
     FormsModule,
-    HttpModule,
-    ScheduleModule
+    HttpModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     CalendarPage,
     LoginPage,
-    LogoutPage
+    LogoutPage,
+    SettingsPage
   ],
   providers: [
     LoginService,
     localStorageService,
-    EventService
+    EventService,
+
   ],
 
 })

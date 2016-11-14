@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import { localStorageService } from './localstorage.service';
 import { Headers, Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
+import {SETTINGS} from '../../app/app.settings';
+
 
 @Injectable()
 export class LoginService {
 
     public static student_id : string = 'student_id';
-    loginUrl : string = 'http://localhost/annee_4/projects/edt-de-vinci/api/login.php';
+
     private headers = new Headers({'Content-Type': 'application/json'});
 
 
@@ -32,7 +34,7 @@ export class LoginService {
 
 
     login(user): Promise<Object> {
-        return this.http.post(this.loginUrl, {
+        return this.http.post(SETTINGS.API_URL + 'login.php', {
                 pass: user.pass,
                 login: user.login,
             }, {headers: this.headers})

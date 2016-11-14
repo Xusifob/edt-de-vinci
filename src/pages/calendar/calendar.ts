@@ -6,111 +6,133 @@ import { LoginService } from '../../app/services/login.service';
 import { EventService } from '../../app/services/event.service';
 import { LoginPage } from '../login/login';
 import {  MenuController } from 'ionic-angular';
-
+import { Http } from '@angular/http';
+import 'rxjs/add/operator/toPromise';
 import { MyEvent } from '../../app/entity/event';
+
+import {SETTINGS} from '../../app/app.settings';
+
+
+import { SchedulerComponent } from '../../app/components/schedule/schedule.component'
+import {localStorageService} from "../../app/services/localstorage.service";
+
+declare var Ical_parser: any;
+
 
 @Component({
   selector: 'page-calendar',
-  templateUrl: 'calendar.html'
+  templateUrl: 'calendar.html',
 })
 export class CalendarPage implements OnInit {
 
-  events: any[];
+  events:any [];
+  resources:any[];
+  private static TIME_EXPIRATION : number = 12*60*60*1000;
+  private static EVENT_ID : string = 'events';
+  private static TIMEZONE : string = 'Europe/Paris';
 
-  header: any;
 
-  event: MyEvent;
+  constructor(public navCtrl:NavController, menu:MenuController, private http:Http) {
 
-  dialogVisible: boolean = false;
-
-  idGen: number = 100;
-
-  constructor(private eventService: EventService, private cd: ChangeDetectorRef, public navCtrl: NavController,menu: MenuController) {
 
     menu.enable(true);
 
-    if(!LoginService.isConnected()){
+
+    if (!LoginService.isConnected()) {
       this.navCtrl.push(LoginPage);
     }
 
   }
 
   ngOnInit() {
-    this.eventService.getEvents().then(events => {this.events = events;});
 
+    var $this = this;
 
-    this.header = {
-      left: 'prev,next today',
-      center: 'title',
-      right: 'month,agendaWeek,agendaDay'
-    };
+    // Load from localstorage first
+    if(!this.loadLocalEvents()) {
+      this.getEvents().then(function (data) {
+        $this._handleEvents(data);
+      });
+    }
   }
 
-  handleDayClick(event) {
-    this.event = new MyEvent();
-    this.event.start = event.date.format();
-    this.dialogVisible = true;
+  /**
+   * Get the events from the server
+   * @returns {Promise<T>}
+     */
+  getEvents() {
+    return new Promise((resolve, reject) => {
+      var id = LoginService.getId();
+      var ical = new Ical_parser(SETTINGS.API_URL + '?id=' + id);
 
-    //trigger detection manually as somehow only moving the mouse quickly after click triggers the automatic detection
-    this.cd.detectChanges();
+      ical.then(function(cal){
+
+            if(cal.response == 200){
+              resolve(cal.getEvents())
+            }else{
+              reject(cal);
+            }
+          })
+          .catch(function(e){
+            console.log(e);
+          })
+      ;
+    });
+
   }
 
-  handleEventClick(e) {
-    this.event = new MyEvent();
-    this.event.title = e.calEvent.title;
+  /**
+   * Load the events from localstorage
+   */
+  loadLocalEvents(){
+    var evts = localStorageService.getItem(CalendarPage.EVENT_ID);
 
-    let start = e.calEvent.start;
-    let end = e.calEvent.end;
-    if(e.view.name === 'month') {
-      start.stripTime();
+    if(evts && evts.events){
+      this.events = evts.events;
+
+      return evts.expired >= Date.now();
+    }else{
+      return false;
     }
-
-    if(end) {
-      end.stripTime();
-      this.event.end = end.format();
-    }
-
-    this.event.id = e.calEvent.id;
-    this.event.start = start.format();
-    this.event.allDay = e.calEvent.allDay;
-    this.dialogVisible = true;
   }
 
-  saveEvent() {
-    //update
-    if(this.event.id) {
-      let index: number = this.findEventIndexById(this.event.id);
-      if(index >= 0) {
-        this.events[index] = this.event;
-      }
-    }
-    //new
-    else {
-      this.event.id = this.idGen;
-      this.events.push(this.event);
-      this.event = null;
-    }
 
-    this.dialogVisible = false;
-  }
+  /**
+   *
+   * @param evts
+   * @private
+   */
+  _handleEvents(evts):void {
 
-  deleteEvent() {
-    let index: number = this.findEventIndexById(this.event.id);
-    if(index >= 0) {
-      this.events.splice(index, 1);
+    var events : MyEvent[] = [];
+
+    for (var i = 0; i < evts.length; i++) {
+
+      var evt = evts[i];
+
+
+
+      var start = new Date(evt.DTSTART);
+      var end = new Date(evt.DTEND);
+
+      var event = new MyEvent();
+      event.title = evt.TITLE;
+      event.start = start;
+      event.end = end;
+      event.location = evt.LOCATION;
+      event.prof = evt.PROF == '' ? '' : evt.PROF;
+
+      events.push(event);
+
+      this.events = events;
+
+      // Set the localstorage value
+      localStorageService.setItem(CalendarPage.EVENT_ID,{
+        events : events,
+        expired : Date.now() + CalendarPage.TIME_EXPIRATION,
+      });
+
+
     }
-    this.dialogVisible = false;
-  }
-
-  findEventIndexById(id: number) {
-    let index = -1;
-    for(let i = 0; i < this.events.length; i++) {
-      if(id == this.events[i].id) {
-        index = i;
-        break;
-      }
-    }
-
-    return index;
   }
 }

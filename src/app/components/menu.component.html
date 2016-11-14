@@ -1,4 +1,4 @@
-<ion-header color="primary">
+<ion-header color="primary" no-shadow>
 
     <ion-toolbar color="primary">
         <button ion-button menuToggle left>
@@ -17,8 +17,14 @@
     </ion-header>
     <ion-content>
         <ion-list>
+            <button ion-item (click)="openPage('calendar')">
+                <ion-icon name="calendar"></ion-icon> Calendar
+            </button>
+            <button ion-item (click)="openPage('settings')">
+                <ion-icon name="settings"></ion-icon> Settings
+            </button>
             <button ion-item (click)="openPage('logout')">
-                Logout
+                <ion-icon name="power"></ion-icon> Logout
             </button>
         </ion-list>
     </ion-content>
