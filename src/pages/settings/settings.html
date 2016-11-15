@@ -1,1 +1,12 @@
 <edt-menu></edt-menu>
+
+<ion-content padding>
+    <button *ngIf="!gcal.isAuthenticated" color="danger" (click)="googlelogin()" ion-button full>Lier Google Calendar</button>
+
+    <ion-item *ngIf="gcal.isAuthenticated" >
+        <ion-label>Calendrier Google</ion-label>
+        <ion-select [(ngModel)]="gcal.calendar" (ionChange)="loadgCalendar()">
+            <ion-option *ngFor="let c of gcal.calendars" [value]="c">{{c.summary}}</ion-option>
+        </ion-select>
+    </ion-item>
+</ion-content>

@@ -17,9 +17,6 @@ export class LoginPage {
     constructor(private Login: LoginService,public navCtrl: NavController) {
         this.Login = Login;
 
-        this.user.pass = 'bastienmalahieude4e5';
-        this.user.login = 'bmalahie';
-
         this.redirect();
 
     }

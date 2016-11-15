@@ -18,6 +18,7 @@ import { SettingsPage } from '../pages/settings/settings';
 import { LoginService } from './services/login.service';
 import { EventService } from './services/event.service';
 import { localStorageService } from './services/localstorage.service';
+import { GoogleCalendarService   } from './services/gcalendar.service';
 
 
 
@@ -33,14 +34,14 @@ import { SchedulerComponent } from './components/schedule/schedule.component';
     LoginPage,
     LogoutPage,
     SettingsPage,
-    MenuComponent,
-    SchedulerComponent
+    SchedulerComponent,
+    MenuComponent
   ],
   imports: [
     IonicModule.forRoot(MyApp),
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -54,7 +55,8 @@ import { SchedulerComponent } from './components/schedule/schedule.component';
     LoginService,
     localStorageService,
     EventService,
-
+    MenuComponent,
+    GoogleCalendarService
   ],
 
 })

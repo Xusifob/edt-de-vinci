@@ -42,8 +42,6 @@ export class LoginService {
             .then(function(response){
                 var data = response.json();
 
-                console.log(data);
-
                 if(data.id){
                     localStorageService.setItem(LoginService.student_id,data.id);
                 }
