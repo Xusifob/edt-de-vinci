@@ -1,6 +1,6 @@
 <edt-menu></edt-menu>
 
-<ion-content padding>
+<ion-content>
     <button *ngIf="!gcal.isAuthenticated" color="danger" (click)="googlelogin()" ion-button full>Lier Google Calendar</button>
 
     <ion-item *ngIf="gcal.isAuthenticated" >
@@ -9,4 +9,8 @@
             <ion-option *ngFor="let c of gcal.calendars" [value]="c">{{c.summary}}</ion-option>
         </ion-select>
     </ion-item>
+   <!-- <ion-item>
+        <ion-label> Afficher le Week-end</ion-label>
+        <ion-toggle (ngModel)="weekend" (ionChange)="displayWeekend()"></ion-toggle>
+    </ion-item>-->
 </ion-content>

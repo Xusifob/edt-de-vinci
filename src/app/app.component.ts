@@ -16,7 +16,7 @@ declare var adincube : any;
 export class MyApp {
   @ViewChild(Nav) nav;
 
-  rootPage = LoginPage;
+  rootPage;
 
   constructor(platform: Platform) {
     platform.ready().then(() => {

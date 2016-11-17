@@ -5,6 +5,7 @@ import { NavController } from 'ionic-angular';
 import {GoogleCalendarService} from "../../app/services/gcalendar.service";
 import {EventService} from "../../app/services/event.service";
 
+
 @Component({
     selector: 'page-settings',
     templateUrl: 'settings.html'
@@ -12,6 +13,7 @@ import {EventService} from "../../app/services/event.service";
 export class SettingsPage {
 
     gcal: GoogleCalendarService;
+    weekend: boolean = false;
 
     constructor(public navCtrl: NavController, gcal: GoogleCalendarService, public eventService : EventService) {
         this.gcal = gcal;
@@ -20,6 +22,10 @@ export class SettingsPage {
 
     googlelogin(): void {
         this.gcal.login();
+    }
+
+    displayWeekend() : void {
+        console.log(this.weekend);
     }
 
 
@@ -31,10 +37,8 @@ export class SettingsPage {
     loadgCalendar(response) : void{
 
         var $this = this;
-        this.gcal.loadCalendar().then(function(response){
-            $this.eventService.handleGoogleEvents(response.result.items)
 
-        });
+        $this.eventService.loadGoogleEvents();
 
     }
 

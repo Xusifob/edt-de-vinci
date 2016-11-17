@@ -9,13 +9,10 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import { MyEvent } from '../../app/entity/event';
 
-import {SETTINGS} from '../../app/app.settings';
-
 import { MenuComponent } from '../../app/components/menu.component';
 
 import { EventService } from '../../app/services/event.service';
-import { SchedulerComponent } from '../../app/components/schedule/schedule.component'
-import {localStorageService} from "../../app/services/localstorage.service";
+import { SchedulerComponent } from '../../app/components/schedule/schedule.component';
 import {GoogleCalendarService} from "../../app/services/gcalendar.service";
 
 
@@ -37,8 +34,6 @@ export class CalendarPage implements OnInit {
    this.eventSevice = eventSevice;
     this.gcal = gcal;
 
-    console.log(eventSevice);
-
     if (!LoginService.isConnected()) {
       this.navCtrl.push(LoginPage);
     }
@@ -51,15 +46,14 @@ export class CalendarPage implements OnInit {
     var $this = this;
 
     // Load from localstorage first
-    if(!this.eventSevice.loadLocalEvents()) {
-      this.eventSevice.getEvents().then(function (data) {
-        $this.eventSevice.handleDevinciEvents(data);
-      });
+    if(!$this.eventSevice.loadLocalEvents()) {
+      $this.eventSevice.loadEvents();
+
     }
-    if(!this.eventSevice.loadLocalGoogleEvents()){
-      this.gcal.loadCalendar().then(function(response){
-        this.eventSevice.handleGoogleEvents(response.result.items)
-      })
+    if(!$this.eventSevice.loadLocalGoogleEvents()){
+      if($this.gcal.isGoogleLinked()) {
+        $this.eventSevice.loadGoogleEvents();
+      }
     }
   }
 }

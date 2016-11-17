@@ -12,24 +12,15 @@ export class GoogleCalendarService {
     static apiKey = 'AIzaSyDyPOKQbyxz87mJqkhE8eMJJEgQ29WtM6M';
     static scopes = ['https://www.googleapis.com/auth/calendar.readonly'];
     static logoutUrl = 'https://accounts.google.com/o/oauth2/revoke?token=';
-
     static CALENDAR_ID : string = 'g_calendar';
-
-    /*
-     * global application state, so it's OK to keep it as field value of a singleton. alternative would be a
-     * buitl-in global value store.
-     */
-    public isAuthenticated: boolean = false;
-    public userName: string;
-    public userImageUrl: string;
-
     public static NOT_CALENDAR = ["Week Numbers","Contacts","Jours fériés en France"];
+
+    public isAuthenticated: boolean = false;
 
     public is_loaded: boolean = false;
 
     public calendars : any[] = [];
-
-    public calendar : any;
+    public calendar : any = null;
 
     constructor(private http: Http) {
         // check the authentication silently
@@ -37,7 +28,7 @@ export class GoogleCalendarService {
         var $this = this;
 
         this.calendar = localStorageService.getItem(GoogleCalendarService.CALENDAR_ID);
-        console.log(this.calendar);
+
         gapi.load('client',function(){
             $this.internalAuthenticate(true);
             $this.is_loaded = true;
@@ -60,9 +51,9 @@ export class GoogleCalendarService {
             this.proceedAuthentication(immediate)
                 .then(() => this.initializeGoogleCalendarAPI())
                 .then(() => this.loadGoogleCalendarAPI())
-                .then((response:any) => this.handleGoogleMapsResponse(response))
+                .then((response:any) => this.handleGoogleCalendarResponse(response))
                 .catch((error:any) => {
-                    console.log('authentication failed: ' + error)
+
                 });
         }else {
             var $this = this;
@@ -113,7 +104,7 @@ export class GoogleCalendarService {
      * Handle google maps answer
      * @param data
      */
-    private handleGoogleMapsResponse(data){
+    private handleGoogleCalendarResponse(data){
         for(var i=0;i<data.result.items.length;i++){
             var item = data.result.items[i];
 
@@ -128,11 +119,42 @@ export class GoogleCalendarService {
     /**
      * Called by settings Page
      */
-    public loadCalendar(){
+    public loadCalendar(): any {
 
-        localStorageService.setItem(GoogleCalendarService.CALENDAR_ID,this.calendar);
+        var $this = this;
+        localStorageService.setItem(GoogleCalendarService.CALENDAR_ID, this.calendar);
 
-        return gapi.client.calendar.events.list({calendarId : this.calendar.id ,maxResults:2500});
+        var attempts = 0;
+
+        return new Promise((resolve, reject) => {
+            var interval = setInterval(function(){
+
+                if($this.is_loaded && gapi.client.calendar && $this.isAuthenticated){
+                    clearInterval(interval);
+                    gapi.client.calendar.events.list(
+                        {calendarId: $this.calendar.id, maxResults: 2500}
+                    ).then(function(data){
+                        resolve(data);
+                    },function(data){
+                        reject(data)
+                    })
+                }else{
+                    attempts++;
+                    if(attempts > 5){
+                        clearInterval(interval);
+                        reject({error : "Too many attempts"})
+                    }
+                }
+            },500);
+        });
+    }
+
+    /**
+     * Return if the app is linked to google API
+     * @returns {boolean}
+     */
+    public isGoogleLinked(){
+        return this.calendar != null;
     }
 
 }

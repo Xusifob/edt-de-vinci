@@ -28,7 +28,7 @@
             </ion-item>
         </p>
         <p>
-            <button ion-button color="secondary" block type="submit" [disabled]="!f.valid">Se connecter</button>
+            <button ion-button color="secondary" block type="submit" [disabled]="!f.valid || inLogin">Se connecter</button>
         </p>
     </form>
 </ion-content>
