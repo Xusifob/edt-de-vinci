@@ -3,6 +3,7 @@ import { NavController } from 'ionic-angular';
 import { LogoutPage } from '../../pages/logout/logout';
 import { CalendarPage } from "../../pages/calendar/calendar";
 import { SettingsPage } from '../../pages/settings/settings';
+import {ColorsPage} from "../../pages/colors/colors";
 
 @Component({
     selector: 'edt-menu',
@@ -36,6 +37,9 @@ export class MenuComponent {
                 break;
             case 'settings' :
                 this.navCtrl.push(SettingsPage);
+                break;
+            case 'color' :
+                this.navCtrl.push(ColorsPage);
                 break;
         }
     }

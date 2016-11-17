@@ -13,6 +13,7 @@ import { CalendarPage } from '../pages/calendar/calendar';
 import { LoginPage } from '../pages/login/login';
 import { LogoutPage } from '../pages/logout/logout';
 import { SettingsPage } from '../pages/settings/settings';
+import {ColorsPage} from "../pages/colors/colors";
 
 // Services
 import { LoginService } from './services/login.service';
@@ -21,10 +22,12 @@ import { localStorageService } from './services/localstorage.service';
 import { GoogleCalendarService   } from './services/gcalendar.service';
 
 
-
 // Components
 import { MenuComponent } from './components/menu.component';
 import { SchedulerComponent } from './components/schedule/schedule.component';
+
+// Pipes
+import {KeysPipe} from "./pipes/keys";
 
 
 @NgModule({
@@ -35,7 +38,9 @@ import { SchedulerComponent } from './components/schedule/schedule.component';
     LogoutPage,
     SettingsPage,
     SchedulerComponent,
-    MenuComponent
+    MenuComponent,
+    ColorsPage,
+    KeysPipe
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -49,7 +54,8 @@ import { SchedulerComponent } from './components/schedule/schedule.component';
     CalendarPage,
     LoginPage,
     LogoutPage,
-    SettingsPage
+    SettingsPage,
+    ColorsPage
   ],
   providers: [
     LoginService,
@@ -58,6 +64,5 @@ import { SchedulerComponent } from './components/schedule/schedule.component';
     MenuComponent,
     GoogleCalendarService
   ],
-
 })
 export class AppModule {}

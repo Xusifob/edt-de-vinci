@@ -6,6 +6,7 @@ import { LoginPage } from '../pages/login/login';
 import {LoginService} from "./services/login.service";
 import {CalendarPage} from "../pages/calendar/calendar";
 import { Nav } from 'ionic-angular';
+import {ColorsPage} from "../pages/colors/colors";
 
 declare var adincube : any;
 
@@ -24,7 +25,7 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
 
       if(LoginService.isConnected()){
-        this.nav.push(CalendarPage);
+        this.nav.push(ColorsPage);
       }else{
         this.nav.push(LoginPage);
       }

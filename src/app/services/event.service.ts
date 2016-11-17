@@ -41,9 +41,9 @@ export class EventService {
 
     events : MyEvent[] = [];
 
-    private g_events : MyEvent[] = [];
+    public g_events : MyEvent[] = [];
 
-    private dv_events : MyEvent[] = [];
+    public dv_events : MyEvent[] = [];
 
 
 
@@ -119,11 +119,15 @@ export class EventService {
      * Load Normal Events
      */
     public loadEvents(){
-
         var $this = this;
-        this.getEvents().then(function (data) {
+        return new Promise((resolve, reject) => {
+            $this.getEvents().then(function (data) {
+                $this.handleDevinciEvents(data);
+                resolve();
+            }).catch(function () {
+                reject();
+            });
 
-            $this.handleDevinciEvents(data);
         });
     }
 
@@ -133,7 +137,6 @@ export class EventService {
     public loadGoogleEvents(){
 
         var $this = this;
-
 
         this.getGoogleEvents().then(function (response) {
             $this.handleGoogleEvents(response.result.items);
@@ -180,6 +183,14 @@ export class EventService {
 
         }
 
+        this.saveEvents();
+    }
+
+
+    /**
+     * Save the events
+     */
+    public saveEvents(){
 
         this.events = this.g_events.concat(this.dv_events);
 
@@ -188,7 +199,6 @@ export class EventService {
             events: this.dv_events,
             expired: Date.now() + EventService.TIME_EXPIRATION,
         });
-
     }
 
 
