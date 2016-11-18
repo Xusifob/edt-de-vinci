@@ -54,7 +54,7 @@ export class ColorsPage implements OnInit {
      */
   groupColors : Object = {};
 
-  constructor(eventSevice : EventService,menu : MenuService ) {
+  constructor(eventSevice : EventService,menu : MenuService) {
 
 
     menu.title = 'Couleurs';
@@ -90,8 +90,6 @@ export class ColorsPage implements OnInit {
 
   selectColor(color) : void {
 
-    console.log(color);
-
     this.groupColors[this.group] = color;
     this.group = '';
 
@@ -101,10 +99,10 @@ export class ColorsPage implements OnInit {
   deleteColor(group) : void {
 
 
-    this.groupColors[group] = undefined;
+   // this.groupColors[group] = undefined;
 
 
-    this.updateColors();
+   // this.updateColors();
 
   }
 

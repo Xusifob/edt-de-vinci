@@ -3,7 +3,7 @@ import { Platform,Nav,MenuController,PopoverController } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 
 import {LoginService} from "./services/login.service";
-import {CalendarPage} from "../pages/calendar/calendar";
+import {CalendarPage} from "../pages/calendar/calendar.page";
 
 import { LoginPage } from '../pages/login/login';
 import {SettingsPage} from "../pages/settings/settings";

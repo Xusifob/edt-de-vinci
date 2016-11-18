@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { User } from '../../app/entity/user';
 import { LoginService } from '../../app/services/login.service';
-import { CalendarPage } from '../calendar/calendar';
+import { CalendarPage } from '../calendar/calendar.page';
 import { NavController } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 

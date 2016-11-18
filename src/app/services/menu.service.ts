@@ -1,10 +1,4 @@
-import { Component, Injectable } from '@angular/core';
-import { App } from 'ionic-angular';
-import { LogoutPage } from '../../pages/logout/logout';
-import { CalendarPage } from "../../pages/calendar/calendar";
-import { SettingsPage } from '../../pages/settings/settings';
-import {ColorsPage} from "../../pages/colors/colors";
-import { MenuController } from 'ionic-angular';
+import { Injectable } from '@angular/core';
 
 
 @Injectable()

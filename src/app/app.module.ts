@@ -8,7 +8,7 @@ import { HttpModule }    from '@angular/http';
 import { MyApp } from './app.component';
 
 // Pages
-import { CalendarPage } from '../pages/calendar/calendar';
+import { CalendarPage } from '../pages/calendar/calendar.page';
 import { LoginPage } from '../pages/login/login';
 import { LogoutPage } from '../pages/logout/logout';
 import { SettingsPage } from '../pages/settings/settings';

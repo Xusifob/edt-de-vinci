@@ -8,7 +8,6 @@ import {LoginService} from "./login.service";
 import {SETTINGS} from '../../app/app.settings';
 import {localStorageService} from "./localstorage.service";
 import {GoogleCalendarService} from "./gcalendar.service";
-import {ColorsPage} from "../../pages/colors/colors";
 
 declare var Ical_parser: any;
 
