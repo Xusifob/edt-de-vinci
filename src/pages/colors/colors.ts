@@ -1,19 +1,9 @@
-import { Component, OnInit, ChangeDetectorRef} from '@angular/core';
-
-import { NavController } from 'ionic-angular';
-
-import { LoginService } from '../../app/services/login.service';
-import { LoginPage } from '../login/login';
-import {  MenuController } from 'ionic-angular';
+import { Component, OnInit} from '@angular/core';
 import 'rxjs/add/operator/toPromise';
-import { MyEvent } from '../../app/entity/event';
 
-import { MenuComponent } from '../../app/components/menu.component';
 
-import { EventService } from '../../app/services/event.service';
-import { SchedulerComponent } from '../../app/components/schedule/schedule.component';
-import { GoogleCalendarService } from "../../app/services/gcalendar.service";
 import {localStorageService} from "../../app/services/localstorage.service";
+import {EventService} from "../../app/services/event.service";
 
 
 @Component({
@@ -22,7 +12,6 @@ import {localStorageService} from "../../app/services/localstorage.service";
 })
 export class ColorsPage implements OnInit {
 
-  menu: MenuComponent;
   eventSevice : EventService;
 
   /**
@@ -30,8 +19,6 @@ export class ColorsPage implements OnInit {
    * @type {Array}
    */
   groups : string[] = [];
-
-  public static COLOR_ID = 'colors';
 
   /**
    * Selected group
@@ -69,7 +56,7 @@ export class ColorsPage implements OnInit {
   constructor(eventSevice : EventService ) {
 
     this.eventSevice = eventSevice;
-    var group = localStorageService.getItem(ColorsPage.COLOR_ID);
+    var group = localStorageService.getItem(EventService.COLORS_ID);
     if(group != null && typeof group === 'object'){
       this.groupColors = group;
     }
@@ -122,18 +109,9 @@ export class ColorsPage implements OnInit {
   }
 
   private updateColors(){
-    for(var i = 0;i<this.eventSevice.dv_events.length;i++) {
-      var evt = this.eventSevice.dv_events[i];
-      if(this.groupColors[evt.title]){
-        evt.color = this.groupColors[evt.title];
-      }else{
-        evt.color = new MyEvent().color;
-      }
-      this.eventSevice.dv_events[i] = evt;
-    }
+    localStorageService.setItem(EventService.COLORS_ID,this.groupColors);
 
+    this.eventSevice.updateColors();
     this.eventSevice.saveEvents();
-    localStorageService.setItem(ColorsPage.COLOR_ID,this.groupColors);
   }
-
 }

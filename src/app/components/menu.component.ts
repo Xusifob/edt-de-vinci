@@ -1,20 +1,30 @@
-import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { Component, Injectable } from '@angular/core';
+import { App } from 'ionic-angular';
 import { LogoutPage } from '../../pages/logout/logout';
 import { CalendarPage } from "../../pages/calendar/calendar";
 import { SettingsPage } from '../../pages/settings/settings';
 import {ColorsPage} from "../../pages/colors/colors";
+import { MenuController } from 'ionic-angular';
 
-@Component({
-    selector: 'edt-menu',
-    templateUrl: 'menu.component.html',
-})
-export class MenuComponent {
+
+@Injectable()
+export class MenuService {
 
     private _title: string;
 
-    constructor(public navCtrl: NavController) {
+    navCtrl;
+    app;
 
+
+    constructor(app: App,public menuCtrl: MenuController) {
+        console.log(app,app.getRootNav(),app.getActiveNav());
+        this.navCtrl = app.getActiveNav();
+        this.app = app;
+    }
+
+    ngOnInit(){
+        console.log(this.app,this.app.getRootNav(),this.app.getActiveNav());
+        this.navCtrl = this.app.getActiveNav();
     }
 
 
@@ -28,6 +38,7 @@ export class MenuComponent {
     }
 
     openPage(page): void {
+
         switch (page){
             case 'logout' :
                 this.navCtrl.push(LogoutPage);

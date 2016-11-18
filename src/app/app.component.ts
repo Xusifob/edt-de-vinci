@@ -1,31 +1,50 @@
 import { Component,ViewChild } from '@angular/core';
-import { Platform } from 'ionic-angular';
+import { Platform,Nav,MenuController } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 
-import { LoginPage } from '../pages/login/login';
 import {LoginService} from "./services/login.service";
 import {CalendarPage} from "../pages/calendar/calendar";
-import { Nav } from 'ionic-angular';
+
+import { LoginPage } from '../pages/login/login';
+import {SettingsPage} from "../pages/settings/settings";
+import { LogoutPage } from '../pages/logout/logout';
 import {ColorsPage} from "../pages/colors/colors";
+
 
 declare var adincube : any;
 
 
 @Component({
-  template: `<ion-nav [root]="rootPage"></ion-nav>`
+  templateUrl: `app.html`
 })
 export class MyApp {
   @ViewChild(Nav) nav;
 
+  private _title: string;
   rootPage;
+  menu;
+  login;
 
-  constructor(platform: Platform) {
+  get title():string {
+    return this._title;
+  }
+
+
+  set title(value:string) {
+    this._title = value;
+  }
+
+  constructor(platform: Platform,menu : MenuController,login : LoginService) {
+
+    this.menu = menu;
+    this.login = LoginService;
+
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
 
       if(LoginService.isConnected()){
-        this.nav.push(ColorsPage);
+        this.nav.push(CalendarPage);
       }else{
         this.nav.push(LoginPage);
       }
@@ -43,4 +62,25 @@ export class MyApp {
       Splashscreen.hide();
     });
   }
+
+
+  openPage(page): void {
+
+    switch (page){
+      case 'logout' :
+        this.nav.push(LogoutPage);
+        break;
+      case 'calendar' :
+        this.nav.push(CalendarPage);
+        break;
+      case 'settings' :
+        this.nav.push(SettingsPage);
+        break;
+      case 'color' :
+        this.nav.push(ColorsPage);
+        break;
+    }
+    this.menu.close();
+  }
+
 }

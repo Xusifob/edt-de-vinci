@@ -8,6 +8,7 @@ import {LoginService} from "./login.service";
 import {SETTINGS} from '../../app/app.settings';
 import {localStorageService} from "./localstorage.service";
 import {GoogleCalendarService} from "./gcalendar.service";
+import {ColorsPage} from "../../pages/colors/colors";
 
 declare var Ical_parser: any;
 
@@ -25,6 +26,7 @@ export class EventService {
     private static TIME_EXPIRATION : number = 12*60*60*1000;
     public static EVENT_ID : string = 'events';
     public static GOOGLE_EVENT_ID : string = 'google_events';
+    public static COLORS_ID : string = 'colors';
 
     private static GOOGLE_COLORS : Object = {
         1 : '#9C27B0',
@@ -202,6 +204,22 @@ export class EventService {
     }
 
 
+    public updateColors(){
+
+        var groupColors = localStorageService.getItem(EventService.COLORS_ID);
+
+            for(var i = 0;i<this.dv_events.length;i++) {
+                var evt = this.dv_events[i];
+                if(groupColors[evt.title]){
+                    evt.color = groupColors[evt.title];
+                }else{
+                    evt.color = new MyEvent().color;
+                }
+                this.dv_events[i] = evt;
+            }
+
+            this.saveEvents();
+    }
 
 
 

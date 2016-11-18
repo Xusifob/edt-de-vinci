@@ -9,7 +9,6 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import { MyEvent } from '../../app/entity/event';
 
-import { MenuComponent } from '../../app/components/menu.component';
 
 import { EventService } from '../../app/services/event.service';
 import { SchedulerComponent } from '../../app/components/schedule/schedule.component';
@@ -25,7 +24,6 @@ export class CalendarPage implements OnInit {
   events:any [];
   resources:any[];
 
-  menu: MenuComponent;
   eventSevice : EventService;
   gcal : GoogleCalendarService;
 

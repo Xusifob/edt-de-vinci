@@ -1,7 +1,7 @@
-<ion-header color="primary" no-shadow>
+<ion-header color="primary" no-shadow *ngIf="login.isConnected()">
 
     <ion-toolbar color="primary">
-        <button ion-button menuToggle left (click)="openMenu()">
+        <button ion-button menuToggle left >
             <ion-icon name="menu"></ion-icon>
         </button>
         <ion-title>
@@ -33,4 +33,9 @@
     </ion-content>
 </ion-menu>
 
-<ion-nav id="nav" #content [root]="rootPage"></ion-nav>
+<ion-nav  [root]="rootPage">
+    <ion-nav id="nav" #content [root]="rootPage"></ion-nav>
+
+</ion-nav>
+
+

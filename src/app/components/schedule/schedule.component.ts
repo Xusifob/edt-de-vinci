@@ -1,4 +1,5 @@
 import {Component, ElementRef, AfterViewInit, OnDestroy, DoCheck, Input, Output, EventEmitter, IterableDiffers} from '@angular/core';
+import {localStorageService} from "../../services/localstorage.service";
 declare var jQuery: any;
 
 @Component({
@@ -137,6 +138,13 @@ export class SchedulerComponent implements AfterViewInit, OnDestroy, DoCheck {
     constructor(private el: ElementRef, differs: IterableDiffers) {
         this.differ = differs.find([]).create(null);
         this.initialized = false;
+
+        var weekend = localStorageService.getItem(localStorageService.WEEKEND_ID);
+
+        if(weekend === true){
+            this.hiddenDays = [];
+        }
+
     }
 
     ngAfterViewInit() {

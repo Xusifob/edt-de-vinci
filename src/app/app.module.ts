@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { IonicApp, IonicModule } from 'ionic-angular';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }   from '@angular/forms';
-import {platformBrowserDynamic} from "@angular/platform-browser-dynamic";
 import { HttpModule }    from '@angular/http';
 
 
@@ -23,11 +22,11 @@ import { GoogleCalendarService   } from './services/gcalendar.service';
 
 
 // Components
-import { MenuComponent } from './components/menu.component';
 import { SchedulerComponent } from './components/schedule/schedule.component';
 
 // Pipes
 import {KeysPipe} from "./pipes/keys";
+import {MenuService} from "./components/menu.component";
 
 
 @NgModule({
@@ -38,7 +37,6 @@ import {KeysPipe} from "./pipes/keys";
     LogoutPage,
     SettingsPage,
     SchedulerComponent,
-    MenuComponent,
     ColorsPage,
     KeysPipe
   ],
@@ -61,8 +59,8 @@ import {KeysPipe} from "./pipes/keys";
     LoginService,
     localStorageService,
     EventService,
-    MenuComponent,
-    GoogleCalendarService
+    GoogleCalendarService,
+    MenuService,
   ],
 })
 export class AppModule {}

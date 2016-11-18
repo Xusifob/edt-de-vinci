@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class localStorageService {
 
+    public static WEEKEND_ID = 'weekend';
+
     /**
      * Set a localStorage item
      * @param key
