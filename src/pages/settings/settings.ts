@@ -5,6 +5,7 @@ import { NavController } from 'ionic-angular';
 import {GoogleCalendarService} from "../../app/services/gcalendar.service";
 import {EventService} from "../../app/services/event.service";
 import {localStorageService} from "../../app/services/localstorage.service";
+import {MenuService} from "../../app/components/menu.component";
 
 
 @Component({
@@ -16,9 +17,12 @@ export class SettingsPage {
     gcal: GoogleCalendarService;
     weekend: boolean = false;
 
-    constructor(public navCtrl: NavController, gcal: GoogleCalendarService, public eventService : EventService) {
+    constructor(public navCtrl: NavController, gcal: GoogleCalendarService, public eventService : EventService,private menu : MenuService) {
         this.gcal = gcal;
         this.weekend = localStorageService.getItem(localStorageService.WEEKEND_ID);
+
+        menu.title = 'Paramètres';
+
     }
 
 

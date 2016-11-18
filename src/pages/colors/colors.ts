@@ -4,6 +4,7 @@ import 'rxjs/add/operator/toPromise';
 
 import {localStorageService} from "../../app/services/localstorage.service";
 import {EventService} from "../../app/services/event.service";
+import {MenuService} from "../../app/components/menu.component";
 
 
 @Component({
@@ -53,7 +54,10 @@ export class ColorsPage implements OnInit {
      */
   groupColors : Object = {};
 
-  constructor(eventSevice : EventService ) {
+  constructor(eventSevice : EventService,menu : MenuService ) {
+
+
+    menu.title = 'Couleurs';
 
     this.eventSevice = eventSevice;
     var group = localStorageService.getItem(EventService.COLORS_ID);
@@ -96,12 +100,8 @@ export class ColorsPage implements OnInit {
 
   deleteColor(group) : void {
 
-    console.log(group);
-    console.log(this.groupColors);
 
     this.groupColors[group] = undefined;
-
-    console.log(this.groupColors);
 
 
     this.updateColors();

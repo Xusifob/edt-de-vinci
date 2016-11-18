@@ -10,23 +10,10 @@ import { MenuController } from 'ionic-angular';
 @Injectable()
 export class MenuService {
 
-    private _title: string;
+    private _title: string = 'Calendrier';
 
-    navCtrl;
-    app;
-
-
-    constructor(app: App,public menuCtrl: MenuController) {
-        console.log(app,app.getRootNav(),app.getActiveNav());
-        this.navCtrl = app.getActiveNav();
-        this.app = app;
+    constructor() {
     }
-
-    ngOnInit(){
-        console.log(this.app,this.app.getRootNav(),this.app.getActiveNav());
-        this.navCtrl = this.app.getActiveNav();
-    }
-
 
     get title():string {
         return this._title;
@@ -35,23 +22,5 @@ export class MenuService {
 
     set title(value:string) {
         this._title = value;
-    }
-
-    openPage(page): void {
-
-        switch (page){
-            case 'logout' :
-                this.navCtrl.push(LogoutPage);
-                break;
-            case 'calendar' :
-                this.navCtrl.push(CalendarPage);
-                break;
-            case 'settings' :
-                this.navCtrl.push(SettingsPage);
-                break;
-            case 'color' :
-                this.navCtrl.push(ColorsPage);
-                break;
-        }
     }
 }

@@ -15,10 +15,7 @@ import {GoogleCalendarService} from "../../app/services/gcalendar.service";
 export class LogoutPage {
 
     constructor(public navCtrl: NavController) {
-        localStorageService.removeItem(LoginService.student_id);
-        localStorageService.removeItem(EventService.EVENT_ID);
-        localStorageService.removeItem(EventService.GOOGLE_EVENT_ID);
-        localStorageService.removeItem(GoogleCalendarService.CALENDAR_ID);
+        localStorageService.flush();
         this.navCtrl.push(LoginPage);
     }
 }

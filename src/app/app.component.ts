@@ -9,6 +9,7 @@ import { LoginPage } from '../pages/login/login';
 import {SettingsPage} from "../pages/settings/settings";
 import { LogoutPage } from '../pages/logout/logout';
 import {ColorsPage} from "../pages/colors/colors";
+import {MenuService} from "./components/menu.component";
 
 
 declare var adincube : any;
@@ -23,6 +24,7 @@ export class MyApp {
   private _title: string;
   rootPage;
   menu;
+  menuCtrl;
   login;
 
   get title():string {
@@ -34,9 +36,10 @@ export class MyApp {
     this._title = value;
   }
 
-  constructor(platform: Platform,menu : MenuController,login : LoginService) {
+  constructor(platform: Platform,menuCtrl : MenuController,menu : MenuService) {
 
     this.menu = menu;
+    this.menuCtrl = menuCtrl;
     this.login = LoginService;
 
     platform.ready().then(() => {
@@ -80,7 +83,7 @@ export class MyApp {
         this.nav.push(ColorsPage);
         break;
     }
-    this.menu.close();
+    this.menuCtrl.close();
   }
 
 }

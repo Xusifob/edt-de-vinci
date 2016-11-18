@@ -36,4 +36,9 @@ export class localStorageService {
 
     }
 
+
+    public static flush(){
+        localStorage.clear();
+    }
+
 }

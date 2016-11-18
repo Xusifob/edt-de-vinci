@@ -1,5 +1,6 @@
 import {Component, ElementRef, AfterViewInit, OnDestroy, DoCheck, Input, Output, EventEmitter, IterableDiffers} from '@angular/core';
 import {localStorageService} from "../../services/localstorage.service";
+import {MenuService} from "../menu.component";
 declare var jQuery: any;
 
 @Component({
@@ -130,14 +131,17 @@ export class SchedulerComponent implements AfterViewInit, OnDestroy, DoCheck {
 
     differ: any;
 
+    menu;
 
     schedule: any;
 
     elem: HTMLElement;
 
-    constructor(private el: ElementRef, differs: IterableDiffers) {
+    constructor(private el: ElementRef, differs: IterableDiffers,menu : MenuService) {
         this.differ = differs.find([]).create(null);
         this.initialized = false;
+
+        this.menu = menu;
 
         var weekend = localStorageService.getItem(localStorageService.WEEKEND_ID);
 
@@ -306,6 +310,7 @@ export class SchedulerComponent implements AfterViewInit, OnDestroy, DoCheck {
             },
         });
         this.initialized = true;
+        this.createDate();
 
 
     }
@@ -336,6 +341,8 @@ export class SchedulerComponent implements AfterViewInit, OnDestroy, DoCheck {
         this.schedule
             .fullCalendar( 'changeView', view )
 
+        this.createDate();
+
     }
 
 
@@ -348,10 +355,41 @@ export class SchedulerComponent implements AfterViewInit, OnDestroy, DoCheck {
                 this.schedule.fullCalendar( 'prev' );
                 break;
         }
+
+        this.createDate();
     }
 
     today() : void {
         this.schedule.fullCalendar( 'today' );
+        this.createDate();
+    }
+
+
+    /**
+     * Create the date and display it in the menu
+     */
+    createDate(){
+        var view = this.schedule.fullCalendar('getView');
+
+        var title;
+        var start = view.start;
+        var end = view.end;
+
+        switch (view.name){
+            case 'agendaWeek' :
+                title = start.format('DD') + ' - ' + end.format('DD MMM YYYY');
+                break;
+            case 'agendaDay':
+                title = start.format('DD MMMM YYYY');
+                break;
+            case 'month':
+                start = start.add(10, 'days');
+                title = start.format('MMMM YYYY');
+                break;
+        }
+
+        this.menu.title = title;
+
     }
 }
 
