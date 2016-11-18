@@ -1,6 +1,6 @@
 import {Component, ElementRef, AfterViewInit, OnDestroy, DoCheck, Input, Output, EventEmitter, IterableDiffers} from '@angular/core';
 import {localStorageService} from "../../services/localstorage.service";
-import {MenuService} from "../menu.component";
+import {MenuService} from "../../services/menu.service";
 declare var jQuery: any;
 
 @Component({

@@ -4,7 +4,7 @@ import 'rxjs/add/operator/toPromise';
 
 import {localStorageService} from "../../app/services/localstorage.service";
 import {EventService} from "../../app/services/event.service";
-import {MenuService} from "../../app/components/menu.component";
+import {MenuService} from "../../app/services/menu.service";
 
 
 @Component({

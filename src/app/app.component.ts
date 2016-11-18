@@ -1,5 +1,5 @@
 import { Component,ViewChild } from '@angular/core';
-import { Platform,Nav,MenuController } from 'ionic-angular';
+import { Platform,Nav,MenuController,PopoverController } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 
 import {LoginService} from "./services/login.service";
@@ -9,7 +9,8 @@ import { LoginPage } from '../pages/login/login';
 import {SettingsPage} from "../pages/settings/settings";
 import { LogoutPage } from '../pages/logout/logout';
 import {ColorsPage} from "../pages/colors/colors";
-import {MenuService} from "./components/menu.component";
+import {MenuService} from "./services/menu.service";
+import Popover from "./components/popover/popover";
 
 
 declare var adincube : any;
@@ -20,23 +21,12 @@ declare var adincube : any;
 })
 export class MyApp {
   @ViewChild(Nav) nav;
-
-  private _title: string;
   rootPage;
   menu;
   menuCtrl;
   login;
 
-  get title():string {
-    return this._title;
-  }
-
-
-  set title(value:string) {
-    this._title = value;
-  }
-
-  constructor(platform: Platform,menuCtrl : MenuController,menu : MenuService) {
+  constructor(platform: Platform,menuCtrl : MenuController,menu : MenuService,public popoverCtrl: PopoverController) {
 
     this.menu = menu;
     this.menuCtrl = menuCtrl;
@@ -63,6 +53,13 @@ export class MyApp {
 
       StatusBar.styleDefault();
       Splashscreen.hide();
+    });
+  }
+
+  openLeftMenu($event) {
+    let popover = this.popoverCtrl.create(Popover);
+    popover.present({
+      ev: $event
     });
   }
 

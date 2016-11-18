@@ -1,18 +1,13 @@
 import { Component, OnInit, ChangeDetectorRef} from '@angular/core';
-
-import { NavController } from 'ionic-angular';
-
-import { LoginService } from '../../app/services/login.service';
-import { LoginPage } from '../login/login';
-import {  MenuController } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
-import { MyEvent } from '../../app/entity/event';
+import { NavController,MenuController } from 'ionic-angular';
 
-
+import { LoginService } from '../../app/services/login.service';
 import { EventService } from '../../app/services/event.service';
-import { SchedulerComponent } from '../../app/components/schedule/schedule.component';
 import {GoogleCalendarService} from "../../app/services/gcalendar.service";
+
+import { LoginPage } from '../login/login';
 
 
 @Component({

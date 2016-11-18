@@ -26,7 +26,8 @@ import { SchedulerComponent } from './components/schedule/schedule.component';
 
 // Pipes
 import {KeysPipe} from "./pipes/keys";
-import {MenuService} from "./components/menu.component";
+import {MenuService} from "./services/menu.service.ts";
+import {Popover} from "./components/popover/popover";
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import {MenuService} from "./components/menu.component";
     SettingsPage,
     SchedulerComponent,
     ColorsPage,
-    KeysPipe
+    KeysPipe,
+    Popover,
   ],
   imports: [
     IonicModule.forRoot(MyApp),
