@@ -18,7 +18,10 @@ export class LoginPage {
     constructor(private Login: LoginService,public navCtrl: NavController,public toastCtrl: ToastController) {
         this.Login = Login;
 
+        window['analytics'].trackView("Login Page");
+
     }
+
 
 
     /**

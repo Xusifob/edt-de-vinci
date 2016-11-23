@@ -1,3 +1,4 @@
 export const SETTINGS = {
-     API_URL : 'http://localhost/annee_4/projects/edt-de-vinci/api/',
+     API_URL : 'http://iim.bastienmalahieude.fr/calendar/edt-de-vinci-api/',
+     EDT_URL : 'https://www.leonard-de-vinci.net/ical_student/',
 };

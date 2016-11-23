@@ -23,6 +23,8 @@ export class SettingsPage {
 
         menu.title = 'Paramètres';
 
+        window['analytics'].trackView("Settings Page");
+
     }
 
 

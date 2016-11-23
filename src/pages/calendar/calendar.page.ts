@@ -32,6 +32,8 @@ export class CalendarPage implements OnInit {
       this.navCtrl.push(LoginPage);
     }
 
+    window['analytics'].trackView("Calendar Page");
+
   }
 
   ngOnInit() {

@@ -26,7 +26,7 @@ import { SchedulerComponent } from './components/schedule/schedule.component';
 
 // Pipes
 import {KeysPipe} from "./pipes/keys";
-import {MenuService} from "./services/menu.service.ts";
+import {MenuService} from "./services/menu.service";
 import {Popover} from "./components/popover/popover";
 
 

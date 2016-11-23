@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-
+import { ToastController } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
+
 import {MyEvent} from "../entity/event";
 import {LoginService} from "./login.service";
 
@@ -17,7 +18,7 @@ export class EventService {
 
     gcal : GoogleCalendarService;
 
-    constructor(private http: Http, gcal : GoogleCalendarService) {
+    constructor(private http: Http, gcal : GoogleCalendarService,public toastCtrl: ToastController) {
         this.gcal = gcal;
 
     }
@@ -55,7 +56,7 @@ export class EventService {
     getEvents() {
         return new Promise((resolve, reject) => {
             var id = LoginService.getId();
-            var ical = new Ical_parser(SETTINGS.API_URL + '?id=' + id);
+            var ical = new Ical_parser(SETTINGS.EDT_URL + id);
 
             ical.then(function(cal){
 
@@ -89,6 +90,9 @@ export class EventService {
 
             this.dv_events = evts.events;
 
+            if(this.dv_events.length == 0)
+                return false;
+
             this.events = this.g_events.concat(this.dv_events);
 
 
@@ -107,6 +111,9 @@ export class EventService {
         if(evts && evts.events){
 
             this.g_events = evts.events;
+
+            if(this.g_events.length == 0)
+                return false;
 
             this.events = this.dv_events.concat(this.g_events);
 
@@ -165,25 +172,32 @@ export class EventService {
 
         this.dv_events =  [];
 
-        for (var i = 0; i < evts.length; i++) {
+        if(evts.length > 0 ) {
+            for (var i = 0; i < evts.length; i++) {
 
-            var evt = evts[i];
+                var evt = evts[i];
 
 
-            var start = new Date(evt.DTSTART);
-            var end = new Date(evt.DTEND);
+                var start = new Date(evt.DTSTART);
+                var end = new Date(evt.DTEND);
 
-            var event = new MyEvent();
-            event.title = evt.TITLE;
-            event.start = start;
-            event.end = end;
-            event.location = evt.LOCATION;
-            event.prof = evt.PROF == '' ? '' : evt.PROF;
+                var event = new MyEvent();
+                event.title = evt.TITLE;
+                event.start = start;
+                event.end = end;
+                event.location = evt.LOCATION;
+                event.prof = evt.PROF == '' ? '' : evt.PROF;
 
-            this.dv_events.push(event);
+                this.dv_events.push(event);
 
+            }
+        }else{
+            let toast = this.toastCtrl.create({
+                message: 'Aucun évènement trouvé',
+                duration: 3000
+            });
+            toast.present();
         }
-
         this.saveEvents();
     }
 
@@ -207,17 +221,17 @@ export class EventService {
 
         var groupColors = localStorageService.getItem(EventService.COLORS_ID);
 
-            for(var i = 0;i<this.dv_events.length;i++) {
-                var evt = this.dv_events[i];
-                if(groupColors[evt.title]){
-                    evt.color = groupColors[evt.title];
-                }else{
-                    evt.color = new MyEvent().color;
-                }
-                this.dv_events[i] = evt;
+        for(var i = 0;i<this.dv_events.length;i++) {
+            var evt = this.dv_events[i];
+            if(groupColors[evt.title]){
+                evt.color = groupColors[evt.title];
+            }else{
+                evt.color = new MyEvent().color;
             }
+            this.dv_events[i] = evt;
+        }
 
-            this.saveEvents();
+        this.saveEvents();
     }
 
 

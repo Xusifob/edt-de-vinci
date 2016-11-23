@@ -2,6 +2,8 @@ import { Http } from '@angular/http';
 import { Injectable } from '@angular/core';
 
 import  { localStorageService } from  './localstorage.service';
+import {CordovaOauth, Google} from 'ng2-cordova-oauth/core';
+
 
 declare var gapi: any;
 

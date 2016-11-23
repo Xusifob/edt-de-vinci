@@ -1,11 +1,7 @@
-import { Component, Input } from '@angular/core';
-import { User } from '../../app/entity/user';
-import { LoginService } from '../../app/services/login.service';
+import { Component } from '@angular/core';
 import { LoginPage } from '../login/login';
 import { NavController } from 'ionic-angular';
 import { localStorageService } from '../../app/services/localstorage.service';
-import {EventService} from "../../app/services/event.service";
-import {GoogleCalendarService} from "../../app/services/gcalendar.service";
 
 
 @Component({
@@ -16,6 +12,8 @@ export class LogoutPage {
 
     constructor(public navCtrl: NavController) {
         localStorageService.flush();
+        window['analytics'].trackView("Logout Page");
         this.navCtrl.push(LoginPage);
+
     }
 }

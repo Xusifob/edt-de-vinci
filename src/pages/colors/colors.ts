@@ -65,6 +65,8 @@ export class ColorsPage implements OnInit {
       this.groupColors = group;
     }
 
+    window['analytics'].trackView("Colors Page");
+
   }
 
   ngOnInit() {

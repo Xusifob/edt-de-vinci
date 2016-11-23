@@ -14,6 +14,8 @@ import Popover from "./components/popover/popover";
 
 
 declare var adincube : any;
+declare var AdMob: any;
+
 
 
 @Component({
@@ -25,16 +27,24 @@ export class MyApp {
   menu;
   menuCtrl;
   login;
+  platform;
+  private admobId: any;
+
 
   constructor(platform: Platform,menuCtrl : MenuController,menu : MenuService,public popoverCtrl: PopoverController) {
 
+    this.platform = platform;
     this.menu = menu;
     this.menuCtrl = menuCtrl;
     this.login = LoginService;
 
+
     platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
+
+      this.setupAdmob();
+      this.setupAnalytics();
+      //this.setupAdnicube();
+
 
       if(LoginService.isConnected()){
         this.nav.push(CalendarPage);
@@ -42,14 +52,6 @@ export class MyApp {
         this.nav.push(LoginPage);
       }
 
-      try {
-        if (adincube) {
-          adincube.setAndroidAppKey('b38ae3a5570e413aa3da');
-          adincube.banner.show(adincube.banner.Size.BANNER_AUTO, adincube.banner.Position.BOTTOM);
-
-
-        }
-      }catch(e){}
 
       StatusBar.styleDefault();
       Splashscreen.hide();
@@ -61,6 +63,55 @@ export class MyApp {
     popover.present({
       ev: $event
     });
+  }
+
+  private setupAdmob(){
+    if(/(android)/i.test(navigator.userAgent)) {
+      this.admobId = {
+        banner: 'ca-app-pub-8562731504945062/3548149438',
+        interstitial: 'ca-app-pub-6869992474017983/1657046752'
+      };
+    } else if(/(ipod|iphone|ipad)/i.test(navigator.userAgent)) {
+      this.admobId = {
+        banner: 'ca-app-pub-8562731504945062/3548149438',
+        interstitial: 'ca-app-pub-6869992474017983/1657046752'
+      };
+    }
+
+    this.createBanner();
+  }
+
+  private setupAnalytics(){
+    if(window['analytics']) {
+      window['analytics'].startTrackerWithId("UA-45967162-6");
+    }
+  }
+
+  private setupAdnicube(){
+    try {
+      if (adincube) {
+        adincube.setAndroidAppKey('b38ae3a5570e413aa3da');
+        adincube.banner.show(adincube.banner.Size.BANNER_AUTO, adincube.banner.Position.BOTTOM);
+      }
+    }catch(e){}
+  }
+
+
+  createBanner() {
+    console.log(AdMob);
+    console.log('create');
+    if(AdMob) {
+      AdMob.createBanner({
+        adId: this.admobId.banner,
+        autoShow: false
+      },this.showBanner);
+    }
+  }
+
+
+  showBanner() {
+      console.log('show');
+      AdMob.showBanner(AdMob.AD_POSITION.BOTTOM_CENTER);
   }
 
 
