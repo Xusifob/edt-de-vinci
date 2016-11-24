@@ -45,6 +45,9 @@ export class CalendarPage implements OnInit {
     if(!$this.eventSevice.loadLocalEvents()) {
       $this.eventSevice.loadEvents();
     }
+
+    $this.eventSevice.loadPhoneEvents();
+
     if(!$this.eventSevice.loadLocalGoogleEvents()){
       if($this.gcal.isGoogleLinked()) {
         $this.eventSevice.loadGoogleEvents();

@@ -27,6 +27,10 @@ export class SettingsPage {
 
     }
 
+    syncPhone(sync): void {
+        this.gcal.sync(sync);
+        this.eventService.loadPhoneEvents();
+    }
 
     googlelogin(): void {
         this.gcal.login();
@@ -36,6 +40,8 @@ export class SettingsPage {
         console.log($event);
         localStorageService.setItem(localStorageService.WEEKEND_ID,$event.checked)
     }
+
+
 
 
     /**

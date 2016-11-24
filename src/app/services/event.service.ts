@@ -3,12 +3,12 @@ import { ToastController } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
-import {MyEvent} from "../entity/event";
 import {LoginService} from "./login.service";
-
-import {SETTINGS} from '../../app/app.settings';
 import {localStorageService} from "./localstorage.service";
 import {GoogleCalendarService} from "./gcalendar.service";
+
+import {MyEvent} from "../entity/event";
+import {SETTINGS} from '../../app/app.settings';
 
 declare var Ical_parser: any;
 
@@ -78,6 +78,7 @@ export class EventService {
     getGoogleEvents() {
         return this.gcal.loadCalendar();
     }
+
 
 
     /**
@@ -152,6 +153,30 @@ export class EventService {
     }
 
 
+    public loadPhoneEvents(){
+        var $this = this;
+
+        var isSync = localStorageService.getItem(localStorageService.PHONE_SYNC);
+
+        if(!isSync){
+            this.events = this.dv_events;
+            return;
+        }
+
+        if(!window['plugins']) {
+            return;
+        }
+
+        window['plugins'].calendar.hasReadWritePermission(
+            function(result) {
+                if(result)
+                    $this.gcal.getPhoneEvents().then(function(events){
+                        $this.handlePhoneEvents(events);
+                    })
+            });
+    }
+
+
     /**
      * Reload the data from calendar
      */
@@ -160,6 +185,7 @@ export class EventService {
         if(this.gcal.isGoogleLinked()) {
             this.loadGoogleEvents();
         }
+        this.loadPhoneEvents();
     }
 
 
@@ -216,7 +242,9 @@ export class EventService {
         });
     }
 
-
+    /**
+     * Update colors for all the events
+     */
     public updateColors(){
 
         var groupColors = localStorageService.getItem(EventService.COLORS_ID);
@@ -234,6 +262,31 @@ export class EventService {
         this.saveEvents();
     }
 
+
+    /**
+     * Handle the events loaded from the user's phone
+     * @param evts
+     */
+    private handlePhoneEvents(evts): void {
+        this.g_events = [];
+
+        for (var i = 0; i < evts.length; i++) {
+            var evt = evts[i];
+            var event = new MyEvent();
+
+            var start = new Date(evt.dtend);
+            var end = new Date(evt.dtstart);
+
+            event.title = evt.title;
+            event.start = start;
+            event.end = end;
+            event.location = evt.eventLocation ? evt.eventLocation :  '';
+            event.prof = '' ; //evt.description ? '' : evt.description;
+            this.g_events.push(event);
+        }
+
+        this.events = this.dv_events.concat(this.g_events);
+    }
 
 
     /**
@@ -260,7 +313,7 @@ export class EventService {
                 event.title = evt.summary;
                 event.start = start;
                 event.end = end;
-                event.location = evt.location ? '' : evt.location;
+                event.location = evt.location ? evt.location : '';
                 event.prof = '' ; //evt.description ? '' : evt.description;
                 if(evt.colorId && EventService.GOOGLE_COLORS[evt.colorId]) {
                     event.color =  EventService.GOOGLE_COLORS[evt.colorId];
