@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ToastController } from 'ionic-angular';
-import 'rxjs/add/operator/toPromise';
 
 import {LoginService} from "./login.service";
 import {localStorageService} from "./localstorage.service";
@@ -9,6 +8,7 @@ import {GoogleCalendarService} from "./gcalendar.service";
 import {MyEvent} from "../entity/event";
 import {SETTINGS} from '../../app/app.settings';
 import {TranslateService} from "ng2-translate";
+import {Http} from "@angular/http";
 
 declare var Ical_parser: any;
 
@@ -18,10 +18,13 @@ export class EventService {
 
     gcal : GoogleCalendarService;
     translate : TranslateService;
+    http : Http;
 
-    constructor(gcal : GoogleCalendarService,public toastCtrl: ToastController,translate : TranslateService) {
+    constructor(gcal : GoogleCalendarService,public toastCtrl: ToastController,translate : TranslateService,http: Http) {
         this.gcal = gcal;
         this.translate = translate;
+        this.http = http;
+        this.user = localStorageService.getItem(localStorageService.USER);
 
     }
 
@@ -30,6 +33,7 @@ export class EventService {
     public static GOOGLE_EVENT_ID : string = 'google_events';
     public static COLORS_ID : string = 'colors';
 
+    public user;
 
     private static GOOGLE_COLORS : Object = {
         1 : '#9C27B0',
@@ -44,11 +48,14 @@ export class EventService {
         10 : '#4CAF50',
     };
 
-    events : MyEvent[] = [];
 
+
+    events : MyEvent[] = [];
     public g_events : MyEvent[] = [];
 
     public dv_events : MyEvent[] = [];
+
+
 
 
 
@@ -56,10 +63,10 @@ export class EventService {
      * Get the events from the server
      * @returns {Promise<T>}
      */
-    getEvents() {
+    getDevinciEvents() {
         return new Promise((resolve, reject) => {
             var id = LoginService.getId();
-            var ical = new Ical_parser(SETTINGS.EDT_URL + id);
+            var ical = new Ical_parser(SETTINGS.DEVINCI_CALENDAR_URL + id);
 
             ical.then(function(cal){
 
@@ -82,6 +89,21 @@ export class EventService {
         return this.gcal.loadCalendar();
     }
 
+
+    getBCITEvents(){
+        var $this = this;
+        return this.http.post(SETTINGS.API_URL + SETTINGS.BCIT_CALENDAR_SUFFIX, {
+                pass: this.user.pass,
+                login: this.user.login,
+                school : this.user.school,
+            })
+            .toPromise()
+            .then(function(response){
+                var data = response.json();
+                console.log(data);
+                return data.data;
+            })
+    }
 
 
     /**
@@ -132,29 +154,53 @@ export class EventService {
      */
     public loadEvents(){
         var $this = this;
-        return new Promise((resolve, reject) => {
-            $this.getEvents().then(function (data) {
-                $this.handleDevinciEvents(data);
-                resolve();
-            }).catch(function () {
-                $this.translate.get('ERROR_FETCH_EVENTS').subscribe(
-                    value => {
-                        let toast = $this.toastCtrl.create({
-                            message: value,
-                            duration: 3000
-                        });
-                        toast.present();
-                    }
-                );
 
-                if($this.dv_events.length == 0){
-                    reject();
-                }else{
-                    resolve();
+        switch (this.user.school) {
+            case 'devinci' :
+                return new Promise((resolve, reject) => {
+                    $this.getDevinciEvents().then(function (data) {
+                        $this.handleDevinciEvents(data);
+                        resolve();
+                    }).catch(function () {
+                        catchEror(resolve, reject);
+                    });
+
+                });
+            case 'bcit' :
+                return new Promise((resolve, reject) => {
+                    $this.getBCITEvents().then(function (data) {
+                        $this.handleBCITEvents(data);
+                        resolve();
+                    }).catch(function () {
+                        catchEror(resolve, reject);
+                    });
+                });
+        }
+
+
+        /**
+         * Function used to catch errors
+         * @param resolve
+         * @param reject
+         */
+        function catchEror(resolve,reject){
+            $this.translate.get('ERROR_FETCH_EVENTS').subscribe(
+                value => {
+                    let toast = $this.toastCtrl.create({
+                        message: value,
+                        duration: 3000
+                    });
+                    toast.present();
                 }
-            });
+            );
 
-        });
+            if($this.dv_events.length == 0){
+                reject();
+            }else{
+                resolve();
+            }
+        }
+
     }
 
     /**
@@ -249,7 +295,52 @@ export class EventService {
                 }
             );
         }
-        this.saveEvents();
+        this.updateColors();
+    }
+
+    /**
+     *
+     * @param evts
+     * @private
+     */
+    private handleBCITEvents(evts):void {
+
+        var $this = this;
+        this.dv_events =  [];
+
+        if(evts.length > 0 ) {
+            for (var i = 0; i < evts.length; i++) {
+
+                var evt = evts[i];
+
+                var start = new Date(evt.start);
+                var end = new Date(evt.start);
+
+                if(!this.isInOffset(start))
+                continue;
+
+                var event = new MyEvent();
+                event.title = evt.title;
+                event.start = start;
+                event.end = end;
+                event.location = evt.location ? evt.location : '';
+                event.prof = evt.type ? evt.type : '';
+
+                this.dv_events.push(event);
+
+            }
+        }else{
+            $this.translate.get('ERROR_NO_EVENT_FOUND').subscribe(
+                value => {
+                    let toast = $this.toastCtrl.create({
+                        message: value,
+                        duration: 3000
+                    });
+                    toast.present();
+                }
+            );
+        }
+        this.updateColors();
     }
 
 
@@ -356,7 +447,7 @@ export class EventService {
 
         this.events = this.dv_events.concat(this.g_events);
 
-        // Set the localstorage value
+// Set the localstorage value
         localStorageService.setItem(EventService.GOOGLE_EVENT_ID, {
             events: this.g_events,
             expired: Date.now() + EventService.TIME_EXPIRATION,

@@ -44,7 +44,7 @@ export class SchedulerComponent implements AfterViewInit, OnDestroy, DoCheck {
 
     @Input() hiddenDays: number[] = [0,6];
 
-    @Input() locale : string = 'fr';
+    @Input() locale : string;
 
     @Input() fixedWeekCount: boolean;
 
@@ -80,9 +80,9 @@ export class SchedulerComponent implements AfterViewInit, OnDestroy, DoCheck {
 
     @Input() scrollTime: any = '06:00:00';
 
-    @Input() minTime: any = '07:30:00';
+    @Input() minTime: any = '06:00:00';
 
-    @Input() maxTime: any = '21:30:00';
+    @Input() maxTime: any = '23:00:00';
 
     @Input() slotEventOverlap: boolean = true;
 
@@ -147,6 +147,7 @@ export class SchedulerComponent implements AfterViewInit, OnDestroy, DoCheck {
 
         this.locale = translate.getBrowserLang();
 
+
         var weekend = localStorageService.getItem(localStorageService.WEEKEND_ID);
 
         if(weekend === true){
@@ -160,10 +161,8 @@ export class SchedulerComponent implements AfterViewInit, OnDestroy, DoCheck {
 
         this.elem = this.el.nativeElement.children[0].children[1].children[1];
         this.schedule = jQuery(this.elem);
-
         this.schedule.fullCalendar({
             schedulerLicenseKey: this.apiKey,
-            // events: this.events,
             resources: this.resources,
             resourceAreaWidth: this.resourceAreaWidth,
             resourceLabelText: this.resourceLabelText,
@@ -203,11 +202,17 @@ export class SchedulerComponent implements AfterViewInit, OnDestroy, DoCheck {
             eventConstraint: this.eventConstraint,
             allDaySlot: this.allDaySlot,
             events: (start, end, timezone, callback) => {
-                callback(this.events);
+
+                var events = [];
+                for (var event of this.events) {
+                    event.start = new Date(event.start);
+                    event.end = new Date(event.start);
+                    events.push(event);
+                }
+
+                    callback(events);
             },
-            // resources: (callback) => {
-            //     callback(this.resources);
-            // },
+
             dayClick: (date, jsEvent, view) => {
                 this.onDayClick.emit({
                     'date': date,

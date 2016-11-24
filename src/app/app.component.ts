@@ -138,7 +138,7 @@ export class MyApp {
     translate.setDefaultLang('fr');
 
     var lang = translate.getBrowserLang();
-    translate.use(lang.match(/en|fr/) ? lang : 'fr');
+    translate.use('en'/*lang.match(/en|fr/) ? lang : 'fr'*/);
   }
 
 

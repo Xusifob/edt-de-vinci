@@ -5,7 +5,7 @@ import {TranslateService} from "ng2-translate";
 @Injectable()
 export class MenuService {
 
-    private _title: string = 'Calendrier';
+    private _title: string;
 
     private _page : string;
 
@@ -13,6 +13,7 @@ export class MenuService {
 
     constructor(translate: TranslateService) {
     this.translate = translate;
+        this.title = 'calendar';
 
     }
 

@@ -36,7 +36,6 @@ export class LoginPage {
             $this.redirect();
             $this.inLogin = false;
         }).catch(function(message){
-
             $this.inLogin = false;
         })
     }

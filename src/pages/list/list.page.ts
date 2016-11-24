@@ -9,7 +9,7 @@ import { EventService } from '../../app/services/event.service';
 import {GoogleCalendarService} from "../../app/services/gcalendar.service";
 
 import { LoginPage } from '../login/login';
-import {MyEvent} from "../../../.tmp/app/entity/event";
+import {MyEvent} from "../../app/entity/event";
 import {MenuService} from "../../app/services/menu.service";
 
 
@@ -28,7 +28,7 @@ export class ListPage implements OnInit {
 
   constructor(public navCtrl:NavController, private http:Http, eventSevice : EventService, gcal : GoogleCalendarService,menu : MenuService) {
 
-    menu.title = 'Liste des évènements';
+    menu.title = 'LIST_PAGE';
 
     this.eventSevice = eventSevice;
     this.gcal = gcal;
