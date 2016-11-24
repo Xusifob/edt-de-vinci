@@ -1,16 +1,16 @@
 <ion-content>
     <div class="pd-15">
-    <button *ngIf="!gcal.isPhoneSync" color="secondary" (click)="syncPhone(true)" ion-button full>Lier L'agenda du Téléphone</button>
-    <button *ngIf="gcal.isPhoneSync" color="danger" (click)="syncPhone(false)" ion-button full>Retirer L'agenda du Téléphone</button>
+    <button *ngIf="!gcal.isPhoneSync" color="secondary" (click)="syncPhone(true)" ion-button full>{{'LINK_CALENDAR' | translate }}</button>
+    <button *ngIf="gcal.isPhoneSync" color="danger" (click)="syncPhone(false)" ion-button full>{{'UNLINK_CALENDAR' | translate }}</button>
     </div>
     <ion-item *ngIf="gcal.isAuthenticated" >
-        <ion-label>Calendrier Google</ion-label>
+        <ion-label>{{"CALENDAR_GOOGLE"| translate}}</ion-label>
         <ion-select [(ngModel)]="gcal.calendar" (ionChange)="loadgCalendar()">
             <ion-option *ngFor="let c of gcal.calendars" [value]="c">{{c.summary}}</ion-option>
         </ion-select>
     </ion-item>
     <ion-item>
-        <ion-label> Afficher le Week-end</ion-label>
+        <ion-label>{{"DISPLAY_WEEKEND" | translate}}</ion-label>
         <ion-toggle checked="{{weekend}}" (ionChange)="displayWeekend($event)"></ion-toggle>
     </ion-item>
 </ion-content>

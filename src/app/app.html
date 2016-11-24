@@ -29,16 +29,16 @@
     <ion-content>
         <ion-list>
             <button ion-item (click)="openPage('calendar')">
-                <ion-icon name="calendar"></ion-icon> Calendrier
+                <ion-icon name="calendar"></ion-icon> {{'MENU_CALENDAR' | translate }}
             </button>
             <button ion-item (click)="openPage('color')">
-                <ion-icon name="color-palette"></ion-icon> Couleur des évènements
+                <ion-icon name="color-palette"></ion-icon> {{'MENU_COLORS' | translate }}
             </button>
             <button ion-item (click)="openPage('settings')">
-                <ion-icon name="settings"></ion-icon> Paramètres
+                <ion-icon name="settings"></ion-icon> {{'MENU_SETTINGS' | translate }}
             </button>
             <button ion-item (click)="openPage('logout')">
-                <ion-icon name="power"></ion-icon> Déconnexion
+                <ion-icon name="power"></ion-icon> {{'MENU_LOGOUT' | translate }}
             </button>
         </ion-list>
     </ion-content>

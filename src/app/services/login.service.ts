@@ -4,6 +4,7 @@ import { Headers, Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import {SETTINGS} from '../../app/app.settings';
 import { ToastController } from 'ionic-angular';
+import {TranslateService} from "ng2-translate";
 
 
 @Injectable()
@@ -13,8 +14,12 @@ export class LoginService {
 
     private headers = new Headers({'Content-Type': 'application/json'});
 
+    private translate : TranslateService;
 
-    constructor(private http: Http,public toastCtrl: ToastController) { }
+
+    constructor(private http: Http,public toastCtrl: ToastController,translate: TranslateService) {
+        this.translate = translate;
+    }
 
     /**
      * Return if the user is connected
@@ -63,11 +68,17 @@ export class LoginService {
      */
     private handleError(error: any){
 
-        let toast = this.toastCtrl.create({
-            message: error.error,
-            duration: 3000
-        });
-        toast.present();
+        var $this = this;
+
+        $this.translate.get(error.error).subscribe(
+            value => {
+                let toast = $this.toastCtrl.create({
+                    message: value,
+                    duration: 3000
+                });
+                toast.present();
+            }
+        );
     }
 
 }

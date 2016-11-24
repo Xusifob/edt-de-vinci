@@ -3,6 +3,8 @@ import { IonicApp, IonicModule } from 'ionic-angular';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }   from '@angular/forms';
 import { HttpModule }    from '@angular/http';
+import { TranslateModule,TranslateLoader } from 'ng2-translate/ng2-translate';
+import { Http } from '@angular/http';
 
 
 import { MyApp } from './app.component';
@@ -30,6 +32,7 @@ import {MenuService} from "./services/menu.service";
 import {Popover} from "./components/popover/popover";
 import {ListPage} from "../pages/list/list.page";
 import {enableProdMode} from '@angular/core';
+import { CreateTranslateLoader } from './services/translate.loader';
 
 enableProdMode();
 
@@ -51,6 +54,11 @@ enableProdMode();
     BrowserModule,
     FormsModule,
     HttpModule,
+    TranslateModule.forRoot({
+      provide: TranslateLoader,
+      useFactory: (CreateTranslateLoader),
+      deps: [Http]
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [

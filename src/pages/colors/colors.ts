@@ -57,7 +57,7 @@ export class ColorsPage implements OnInit {
   constructor(eventSevice : EventService,menu : MenuService) {
 
 
-    menu.title = 'Couleurs';
+    menu.title = 'COLOR_PAGE';
 
     this.eventSevice = eventSevice;
     var group = localStorageService.getItem(EventService.COLORS_ID);

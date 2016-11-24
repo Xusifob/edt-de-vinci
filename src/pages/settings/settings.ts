@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {TranslateService} from 'ng2-translate';
 
 import { NavController } from 'ionic-angular';
 
@@ -17,11 +18,12 @@ export class SettingsPage {
     gcal: GoogleCalendarService;
     weekend: boolean = false;
 
-    constructor(public navCtrl: NavController, gcal: GoogleCalendarService, public eventService : EventService,private menu : MenuService) {
+    constructor(public navCtrl: NavController, gcal: GoogleCalendarService, public eventService : EventService,private menu : MenuService, translate  : TranslateService) {
         this.gcal = gcal;
         this.weekend = localStorageService.getItem(localStorageService.WEEKEND_ID);
 
-        menu.title = 'Paramètres';
+
+        menu.title = 'SETTINGS_PAGE';
 
         if(typeof window['analytics'] !== 'undefined') {
             window['analytics'].trackView("Settings Page");

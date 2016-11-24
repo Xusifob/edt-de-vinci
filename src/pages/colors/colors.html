@@ -1,6 +1,6 @@
 <ion-content>
     <ion-item>
-        <ion-label>Choisir un groupe</ion-label>
+        <ion-label>{{ 'COLOR_CHOOSE' | translate}}</ion-label>
         <ion-select [(ngModel)]="group">
             <ion-option *ngFor="let group of groups" [value]="group">{{group}}</ion-option>
         </ion-select>
