@@ -33,29 +33,15 @@ export class EventService {
     public static GOOGLE_EVENT_ID : string = 'google_events';
     public static COLORS_ID : string = 'colors';
 
+    public is_loading : boolean = false;
+
     public user;
-
-    private static GOOGLE_COLORS : Object = {
-        1 : '#9C27B0',
-        2 : '#00BCD4',
-        3 : '#009688',
-        4 : '#F44336',
-        5 : '#FFC107',
-        6 : '#FF9800',
-        7 : '#2196F3',
-        8 : '#CDDC39',
-        9 : '#795548',
-        10 : '#4CAF50',
-    };
-
 
 
     events : MyEvent[] = [];
     public g_events : MyEvent[] = [];
 
     public dv_events : MyEvent[] = [];
-
-
 
 
 
@@ -90,6 +76,10 @@ export class EventService {
     }
 
 
+    /**
+     *
+     * @returns {any}
+     */
     getBCITEvents(){
         var $this = this;
         return this.http.post(SETTINGS.API_URL + SETTINGS.BCIT_CALENDAR_SUFFIX, {
@@ -100,7 +90,6 @@ export class EventService {
             .toPromise()
             .then(function(response){
                 var data = response.json();
-                console.log(data);
                 return data.data;
             })
     }
@@ -153,13 +142,18 @@ export class EventService {
      * Load Normal Events
      */
     public loadEvents(){
+
+        this.is_loading = true;
+
         var $this = this;
+
+        this.user = localStorageService.getItem(localStorageService.USER);
 
         switch (this.user.school) {
             case 'devinci' :
                 return new Promise((resolve, reject) => {
                     $this.getDevinciEvents().then(function (data) {
-                        $this.handleDevinciEvents(data);
+                        $this.handleEvents(data,'devinci');
                         resolve();
                     }).catch(function () {
                         catchEror(resolve, reject);
@@ -169,7 +163,7 @@ export class EventService {
             case 'bcit' :
                 return new Promise((resolve, reject) => {
                     $this.getBCITEvents().then(function (data) {
-                        $this.handleBCITEvents(data);
+                        $this.handleEvents(data,'bcit');
                         resolve();
                     }).catch(function () {
                         catchEror(resolve, reject);
@@ -203,19 +197,12 @@ export class EventService {
 
     }
 
+
+
+
     /**
-     * Load Normal Events
+     * Load phone events
      */
-    public loadGoogleEvents(){
-
-        var $this = this;
-
-        this.getGoogleEvents().then(function (response) {
-            $this.handleGoogleEvents(response.result.items);
-        });
-    }
-
-
     public loadPhoneEvents(){
         var $this = this;
 
@@ -234,7 +221,7 @@ export class EventService {
             function(result) {
                 if(result)
                     $this.gcal.getPhoneEvents().then(function(events){
-                        $this.handlePhoneEvents(events);
+                        $this.handleEvents(events,'phone');
                     })
             });
     }
@@ -245,90 +232,117 @@ export class EventService {
      */
     public reload(){
         this.loadEvents();
-        if(this.gcal.isGoogleLinked()) {
+       /* if(this.gcal.isGoogleLinked()) {
             this.loadGoogleEvents();
-        }
+        }*/
         this.loadPhoneEvents();
     }
 
 
+
     /**
-     *
-     * @param evts
-     * @private
+     * Create event from BCIT source
+     * @param evt
+     * @returns {boolean}
      */
-    private handleDevinciEvents(evts):void {
+    private createEventFromBCIT(evt){
+        var start = new Date(evt.start);
+        var end = new Date(evt.start);
 
-        var $this = this;
-        this.dv_events =  [];
+        if(!this.isInOffset(start))
+            return false;
 
-        if(evts.length > 0 ) {
-            for (var i = 0; i < evts.length; i++) {
+        var event = new MyEvent();
+        event.title = evt.title;
+        event.start = start;
+        event.end = end;
+        event.location = evt.location ? evt.location : '';
+        event.prof = evt.type ? evt.type : '';
 
-                var evt = evts[i];
+        var event_tmp = JSON.stringify(event);
+        event = JSON.parse(event_tmp);
+        this.dv_events.push(event);
+    }
+
+    /**
+     * Create event from Devinci source
+     * @param evt
+     * @returns {boolean}
+     */
+    private createEventFromDeVinci(evt){
+        var start = new Date(evt.DTSTART);
+        var end = new Date(evt.DTEND);
+
+        if(!this.isInOffset(start))
+            return false;
+
+        var event = new MyEvent();
+        event.title = evt.TITLE;
+        event.start = start;
+        event.end = end;
+        event.location = evt.LOCATION ? evt.LOCATION : '';
+        event.prof = evt.PROF ? evt.PROF : '';
+    }
+
+    /**
+     * Create event from Phone source
+     * @param evt
+     * @returns {boolean}
+     */
+    private createEventFromPhone(evt){
+        var start = new Date(evt.dtend);
+        var end = new Date(evt.dtstart);
+
+        if(!this.isInOffset(start))
+            return false;
+
+        var event = new MyEvent();
+        event.title = evt.title;
+        event.start = start;
+        event.end = end;
+        event.location = evt.eventLocation ? evt.eventLocation :  '';
+        event.prof = '' ; //evt.description ? '' : evt.description;
 
 
-                var start = new Date(evt.DTSTART);
-                var end = new Date(evt.DTEND);
-
-                if(!this.isInOffset(start))
-                    continue;
-
-                var event = new MyEvent();
-                event.title = evt.TITLE;
-                event.start = start;
-                event.end = end;
-                event.location = evt.LOCATION ? evt.LOCATION : '';
-                event.prof = evt.PROF ? evt.PROF : '';
-
-                this.dv_events.push(event);
-
-            }
-        }else{
-            $this.translate.get('ERROR_NO_EVENT_FOUND').subscribe(
-                value => {
-                    let toast = $this.toastCtrl.create({
-                        message: value,
-                        duration: 3000
-                    });
-                    toast.present();
-                }
-            );
-        }
-        this.updateColors();
+        this.g_events.push(event);
     }
 
     /**
      *
      * @param evts
+     * @param source
      * @private
      */
-    private handleBCITEvents(evts):void {
+    private handleEvents(evts,source):void {
 
         var $this = this;
-        this.dv_events =  [];
-
         if(evts.length > 0 ) {
             for (var i = 0; i < evts.length; i++) {
 
-                var evt = evts[i];
+                switch (source) {
+                    case 'bcit':
+                        if(i === 0){
+                            this.dv_events = [];
+                        }
 
-                var start = new Date(evt.start);
-                var end = new Date(evt.start);
-
-                if(!this.isInOffset(start))
-                continue;
-
-                var event = new MyEvent();
-                event.title = evt.title;
-                event.start = start;
-                event.end = end;
-                event.location = evt.location ? evt.location : '';
-                event.prof = evt.type ? evt.type : '';
-
-                this.dv_events.push(event);
+                        this.createEventFromBCIT(evts[i]);
+                        break;
+                    case 'devinci':
+                        if(i === 0){
+                            this.dv_events = [];
+                        }
+                        this.createEventFromDeVinci(evts[i]);
+                        break;
+                    case 'phone':
+                        if(i === 0)
+                            this.g_events = [];
+                        this.createEventFromPhone(evts[i]);
+                        break;
+                }
 
             }
+            this.updateColors();
+
         }else{
             $this.translate.get('ERROR_NO_EVENT_FOUND').subscribe(
                 value => {
@@ -340,7 +354,6 @@ export class EventService {
                 }
             );
         }
-        this.updateColors();
     }
 
 
@@ -356,6 +369,8 @@ export class EventService {
             events: this.dv_events,
             expired: Date.now() + EventService.TIME_EXPIRATION,
         });
+
+        this.is_loading = false;
     }
 
     /**
@@ -365,54 +380,74 @@ export class EventService {
 
         var groupColors = localStorageService.getItem(EventService.COLORS_ID);
 
-        for(var i = 0;i<this.dv_events.length;i++) {
-            var evt = this.dv_events[i];
-            if(groupColors[evt.title]){
-                evt.color = groupColors[evt.title];
-            }else{
-                evt.color = new MyEvent().color;
+        if(groupColors !== null) {
+            for (var i = 0; i < this.dv_events.length; i++) {
+                var evt = this.dv_events[i];
+                if (groupColors[evt.title]) {
+                    evt.color = groupColors[evt.title];
+                } else {
+                    evt.color = new MyEvent().color;
+                }
+                this.dv_events[i] = evt;
             }
-            this.dv_events[i] = evt;
         }
 
         this.saveEvents();
     }
 
 
+
+
+
+
     /**
-     * Handle the events loaded from the user's phone
-     * @param evts
+     *
+     * @param start Date
      */
-    private handlePhoneEvents(evts): void {
-        this.g_events = [];
+    isInOffset(start) : boolean{
 
-        for (var i = 0; i < evts.length; i++) {
-            var evt = evts[i];
-            var event = new MyEvent();
+        var timeStampOffset = SETTINGS.EVENT_OFFSET*30*24*60*60*1000;
 
-            var start = new Date(evt.dtend);
-            var end = new Date(evt.dtstart);
+        var now = new Date().getTime();
 
-            if(!this.isInOffset(start))
-                continue;
+        if(start.getTime() > now + timeStampOffset)
+            return false;
+        if(start.getTime() < now - timeStampOffset)
+            return false;
 
-            event.title = evt.title;
-            event.start = start;
-            event.end = end;
-            event.location = evt.eventLocation ? evt.eventLocation :  '';
-            event.prof = '' ; //evt.description ? '' : evt.description;
-            this.g_events.push(event);
-        }
-
-        this.events = this.dv_events.concat(this.g_events);
+        return true;
     }
 
 
+    /* private static GOOGLE_COLORS : Object = {
+     1 : '#9C27B0',
+     2 : '#00BCD4',
+     3 : '#009688',
+     4 : '#F44336',
+     5 : '#FFC107',
+     6 : '#FF9800',
+     7 : '#2196F3',
+     8 : '#CDDC39',
+     9 : '#795548',
+     10 : '#4CAF50',
+     };*/
+    /**
+     * Load Normal Events
+
+     public loadGoogleEvents(){
+
+        var $this = this;
+
+        this.getGoogleEvents().then(function (response) {
+            $this.handleGoogleEvents(response.result.items);
+        });
+    }
+     */
     /**
      * Handle Google Calendar Events
      * @param evts
-     */
-    private handleGoogleEvents(evts):void {
+
+     private handleGoogleEvents(evts):void {
 
         this.g_events = [];
 
@@ -454,24 +489,5 @@ export class EventService {
         });
 
     }
-
-
-    /**
-     *
-     * @param start Date
      */
-    isInOffset(start) : boolean{
-
-        var timeStampOffset = SETTINGS.EVENT_OFFSET*30*24*60*60*1000;
-
-        var now = new Date().getTime();
-
-        if(start.getTime() > now + timeStampOffset)
-            return false;
-        if(start.getTime() < now - timeStampOffset)
-            return false;
-
-        return true;
-    }
-
 }

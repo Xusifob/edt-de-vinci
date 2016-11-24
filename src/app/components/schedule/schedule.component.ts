@@ -137,16 +137,16 @@ export class SchedulerComponent implements AfterViewInit, OnDestroy, DoCheck {
 
     schedule: any;
 
+    translate : TranslateService;
+
     elem: HTMLElement;
 
     constructor(private el: ElementRef, differs: IterableDiffers,menu : MenuService, translate: TranslateService) {
         this.differ = differs.find([]).create(null);
         this.initialized = false;
+        this.translate = translate;
 
         this.menu = menu;
-
-        this.locale = translate.getBrowserLang();
-
 
         var weekend = localStorageService.getItem(localStorageService.WEEKEND_ID);
 
@@ -161,6 +161,9 @@ export class SchedulerComponent implements AfterViewInit, OnDestroy, DoCheck {
 
         this.elem = this.el.nativeElement.children[0].children[1].children[1];
         this.schedule = jQuery(this.elem);
+
+        this.locale = this.translate.getBrowserLang();
+
         this.schedule.fullCalendar({
             schedulerLicenseKey: this.apiKey,
             resources: this.resources,
@@ -203,6 +206,8 @@ export class SchedulerComponent implements AfterViewInit, OnDestroy, DoCheck {
             allDaySlot: this.allDaySlot,
             events: (start, end, timezone, callback) => {
 
+                callback(this.events);
+                /*
                 var events = [];
                 for (var event of this.events) {
                     event.start = new Date(event.start);
@@ -210,7 +215,7 @@ export class SchedulerComponent implements AfterViewInit, OnDestroy, DoCheck {
                     events.push(event);
                 }
 
-                    callback(events);
+                    callback(events);*/
             },
 
             dayClick: (date, jsEvent, view) => {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="com.malerbati.devinciedt" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>EDT De vinci</name>
-  <description>Emploi du temps Devinci</description>
+  <name>University Calendar</name>
+  <description>Calendrier pour votre université</description>
   <author email="b.malahieude@free.fr" href="https://bastienmalahieude.fr/">Basten Malahieude</author>
   <content src="index.html"/>
   <access origin="*"/>

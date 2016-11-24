@@ -39,25 +39,13 @@ export class SettingsPage {
         this.gcal.login();
     }
 
-    displayWeekend($event) : void {
-        console.log($event);
-        localStorageService.setItem(localStorageService.WEEKEND_ID,$event.checked)
-    }
-
-
-
 
     /**
-     * Load google calendar
-     *
-     * @param response
+     * Display the weekend
+     * @param $event
      */
-    loadgCalendar(response) : void{
-
-        var $this = this;
-
-        $this.eventService.loadGoogleEvents();
-
+    displayWeekend($event) : void {
+        localStorageService.setItem(localStorageService.WEEKEND_ID,$event.checked)
     }
 
 }

@@ -9,7 +9,7 @@
 
         <ion-item >
             <ion-label>{{"SELECT_SCHOOL"| translate}}</ion-label>
-            <ion-select [(ngModel)]="user.school" name="school">
+            <ion-select required [(ngModel)]="user.school" name="school">
                 <ion-option value="bcit">{{"BCIT" | translate}}</ion-option>
                 <ion-option value="devinci">{{"PULV" | translate}}</ion-option>
             </ion-select>

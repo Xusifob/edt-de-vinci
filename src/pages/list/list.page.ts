@@ -44,8 +44,6 @@ export class ListPage implements OnInit {
   }
 
   ngOnInit() {
-
-
     var $this = this;
 
     // Load from localstorage first
@@ -55,13 +53,6 @@ export class ListPage implements OnInit {
     }
 
     $this.eventSevice.loadPhoneEvents();
-
-    if(!$this.eventSevice.loadLocalGoogleEvents()){
-      if($this.gcal.isGoogleLinked()) {
-        $this.eventSevice.loadGoogleEvents();
-        $this.getEventsForList();
-      }
-    }
     $this.getEventsForList();
   }
 

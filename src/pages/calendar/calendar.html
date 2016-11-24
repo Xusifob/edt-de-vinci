@@ -1,7 +1,8 @@
+<ion-spinner *ngIf="eventService.is_loading" color="primary" name="crescent"></ion-spinner>
 <ds-scheduler
         editable="false"
         defaultView="agendaWeek"
-        [events]="eventSevice.events"
+        [events]="eventService.events"
         [defaultDate]="defaultDate"
         slotLabelFormat="HH:mm"
         resourceAreaWidth="120"
