@@ -4,6 +4,7 @@ import { StatusBar, Splashscreen } from 'ionic-native';
 
 import {LoginService} from "./services/login.service";
 import {CalendarPage} from "../pages/calendar/calendar.page";
+import {localStorageService} from "../../.tmp/app/services/localstorage.service";
 
 import { LoginPage } from '../pages/login/login';
 import {SettingsPage} from "../pages/settings/settings";
@@ -43,7 +44,9 @@ export class MyApp {
 
       this.setupAdmob();
       this.setupAnalytics();
+
       //this.setupAdnicube();
+      this.setCompatibility();
 
 
       if(LoginService.isConnected()){
@@ -97,9 +100,18 @@ export class MyApp {
   }
 
 
+  // Set compatibility with previous version V 0.0.X
+  private setCompatibility(){
+    var oldId = localStorage.getItem('studentId');
+    if(oldId){
+      localStorageService.setItem(LoginService.student_id,oldId);
+      localStorageService.removeItem('studentId');
+    }
+  }
+
+
   createBanner() {
     console.log(AdMob);
-    console.log('create');
     if(AdMob) {
       AdMob.createBanner({
         adId: this.admobId.banner,
@@ -110,7 +122,6 @@ export class MyApp {
 
 
   showBanner() {
-      console.log('show');
       AdMob.showBanner(AdMob.AD_POSITION.BOTTOM_CENTER);
   }
 
