@@ -27,6 +27,7 @@ export class EventService {
     public static EVENT_ID : string = 'events';
     public static GOOGLE_EVENT_ID : string = 'google_events';
     public static COLORS_ID : string = 'colors';
+    public static EVENT_GAP : number = 6;
 
     private static GOOGLE_COLORS : Object = {
         1 : '#9C27B0',
@@ -216,12 +217,15 @@ export class EventService {
                 var start = new Date(evt.DTSTART);
                 var end = new Date(evt.DTEND);
 
+                if(!this.isInOffset(start))
+                    continue;
+
                 var event = new MyEvent();
                 event.title = evt.TITLE;
                 event.start = start;
                 event.end = end;
-                event.location = evt.LOCATION;
-                event.prof = evt.PROF == '' ? '' : evt.PROF;
+                event.location = evt.LOCATION ? evt.LOCATION : '';
+                event.prof = evt.PROF ? evt.PROF : '';
 
                 this.dv_events.push(event);
 
@@ -286,6 +290,9 @@ export class EventService {
             var start = new Date(evt.dtend);
             var end = new Date(evt.dtstart);
 
+            if(!this.isInOffset(start))
+                continue;
+
             event.title = evt.title;
             event.start = start;
             event.end = end;
@@ -319,6 +326,9 @@ export class EventService {
                 if(isNaN( start.getTime()) || isNaN( end.getTime()))
                     continue;
 
+                if(!this.isInOffset(start))
+                    continue;
+
                 event.title = evt.summary;
                 event.start = start;
                 event.end = end;
@@ -341,4 +351,24 @@ export class EventService {
         });
 
     }
+
+
+    /**
+     *
+     * @param start Date
+     */
+    isInOffset(start) : boolean{
+
+        var timeStampOffset = SETTINGS.EVENT_OFFSET*30*24*60*60*1000;
+
+        var now = new Date().getTime();
+
+        if(start.getTime() > now + timeStampOffset)
+            return false;
+        if(start.getTime() < now - timeStampOffset)
+            return false;
+
+        return true;
+    }
+
 }

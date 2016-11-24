@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import  {localStorageService } from  './localstorage.service';
 import {ToastController} from "../../../node_modules/ionic-angular/components/toast/toast";
 
+import { SETTINGS } from  '../app.settings';
 
 declare var gapi: any;
 
@@ -52,11 +53,10 @@ export class GoogleCalendarService {
         return new Promise((resolve, reject) => {
             if(window['plugins']) {
                 // Number of month before and after to load
-                var offsetMonth = 9;
                 var startDate = new Date();
                 var endDate = new Date();
-                startDate.setMonth(startDate.getMonth() - offsetMonth);
-                endDate.setMonth(endDate.getMonth() + offsetMonth);
+                startDate.setMonth(startDate.getMonth() - SETTINGS.EVENT_OFFSET);
+                endDate.setMonth(endDate.getMonth() + SETTINGS.EVENT_OFFSET);
 
                 window['plugins'].calendar.listEventsInRange(startDate, endDate,function(data){
                     resolve(data);
