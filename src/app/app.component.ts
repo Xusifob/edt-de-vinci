@@ -5,12 +5,14 @@ import { StatusBar, Splashscreen } from 'ionic-native';
 import {LoginService} from "./services/login.service";
 import {CalendarPage} from "../pages/calendar/calendar.page";
 import {localStorageService} from "../../.tmp/app/services/localstorage.service";
+import {MenuService} from "./services/menu.service";
 
 import { LoginPage } from '../pages/login/login';
 import {SettingsPage} from "../pages/settings/settings";
 import { LogoutPage } from '../pages/logout/logout';
 import {ColorsPage} from "../pages/colors/colors";
-import {MenuService} from "./services/menu.service";
+import {ListPage} from "../pages/list/list.page";
+
 import Popover from "./components/popover/popover";
 
 
@@ -50,8 +52,10 @@ export class MyApp {
 
 
       if(LoginService.isConnected()){
+        this.menu.page = 'calendar';
         this.nav.push(CalendarPage);
       }else{
+        this.menu.page = 'login';
         this.nav.push(LoginPage);
       }
 
@@ -111,8 +115,7 @@ export class MyApp {
 
 
   createBanner() {
-    console.log(AdMob);
-    if(AdMob) {
+    if(typeof AdMob !== 'undefined') {
       AdMob.createBanner({
         adId: this.admobId.banner,
         autoShow: false
@@ -122,11 +125,13 @@ export class MyApp {
 
 
   showBanner() {
-      AdMob.showBanner(AdMob.AD_POSITION.BOTTOM_CENTER);
+    AdMob.showBanner(AdMob.AD_POSITION.BOTTOM_CENTER);
   }
 
 
   openPage(page): void {
+
+    this.menu.page = page;
 
     switch (page){
       case 'logout' :
@@ -140,6 +145,9 @@ export class MyApp {
         break;
       case 'color' :
         this.nav.push(ColorsPage);
+        break;
+      case 'list':
+        this.nav.push(ListPage);
         break;
     }
     this.menuCtrl.close();

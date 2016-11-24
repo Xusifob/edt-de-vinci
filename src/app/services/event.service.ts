@@ -134,7 +134,16 @@ export class EventService {
                 $this.handleDevinciEvents(data);
                 resolve();
             }).catch(function () {
-                reject();
+                let toast = $this.toastCtrl.create({
+                    message: 'Erreur lors de la récupération des évènements',
+                    duration: 3000
+                });
+                toast.present();
+                if($this.dv_events.length == 0){
+                    reject();
+                }else{
+                    resolve();
+                }
             });
 
         });

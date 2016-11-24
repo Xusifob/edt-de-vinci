@@ -12,7 +12,9 @@ export class LogoutPage {
 
     constructor(public navCtrl: NavController) {
         localStorageService.flush();
-        window['analytics'].trackView("Logout Page");
+        if(typeof window['analytics'] !== 'undefined') {
+            window['analytics'].trackView("Logout Page");
+        }
         this.navCtrl.push(LoginPage);
 
     }

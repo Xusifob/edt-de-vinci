@@ -6,6 +6,8 @@ export class MenuService {
 
     private _title: string = 'Calendrier';
 
+    private _page : string;
+
     constructor() {
     }
 
@@ -16,5 +18,14 @@ export class MenuService {
 
     set title(value:string) {
         this._title = value;
+    }
+
+
+    get page():string {
+        return this._page;
+    }
+
+    set page(value:string) {
+        this._page = value;
     }
 }

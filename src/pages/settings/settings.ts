@@ -23,8 +23,9 @@ export class SettingsPage {
 
         menu.title = 'Paramètres';
 
-        window['analytics'].trackView("Settings Page");
-
+        if(typeof window['analytics'] !== 'undefined') {
+            window['analytics'].trackView("Settings Page");
+        }
     }
 
     syncPhone(sync): void {

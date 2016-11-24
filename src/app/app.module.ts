@@ -28,7 +28,10 @@ import { SchedulerComponent } from './components/schedule/schedule.component';
 import {KeysPipe} from "./pipes/keys";
 import {MenuService} from "./services/menu.service";
 import {Popover} from "./components/popover/popover";
+import {ListPage} from "../pages/list/list.page";
+import {enableProdMode} from '@angular/core';
 
+enableProdMode();
 
 @NgModule({
   declarations: [
@@ -41,6 +44,7 @@ import {Popover} from "./components/popover/popover";
     ColorsPage,
     KeysPipe,
     Popover,
+    ListPage,
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -55,7 +59,8 @@ import {Popover} from "./components/popover/popover";
     LoginPage,
     LogoutPage,
     SettingsPage,
-    ColorsPage
+    ColorsPage,
+    ListPage
   ],
   providers: [
     LoginService,

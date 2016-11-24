@@ -17,8 +17,9 @@ export class LoginPage {
     constructor(private Login: LoginService,public navCtrl: NavController) {
         this.Login = Login;
 
-        window['analytics'].trackView("Login Page");
-
+        if(typeof window['analytics'] !== 'undefined') {
+            window['analytics'].trackView("Login Page");
+        }
     }
 
 
