@@ -3,7 +3,6 @@ import { User } from '../../app/entity/user';
 import { LoginService } from '../../app/services/login.service';
 import { CalendarPage } from '../calendar/calendar.page';
 import { NavController } from 'ionic-angular';
-import { ToastController } from 'ionic-angular';
 
 
 @Component({
@@ -15,11 +14,12 @@ export class LoginPage {
     user : User = new User();
     inLogin : boolean = false;
 
-    constructor(private Login: LoginService,public navCtrl: NavController,public toastCtrl: ToastController) {
+    constructor(private Login: LoginService,public navCtrl: NavController) {
         this.Login = Login;
 
-        window['analytics'].trackView("Login Page");
-
+        if(typeof window['analytics'] !== 'undefined') {
+            window['analytics'].trackView("Login Page");
+        }
     }
 
 
@@ -38,11 +38,6 @@ export class LoginPage {
         }).catch(function(message){
 
             $this.inLogin = false;
-            let toast = $this.toastCtrl.create({
-                message: message,
-                duration: 3000
-            });
-            toast.present();
         })
     }
 

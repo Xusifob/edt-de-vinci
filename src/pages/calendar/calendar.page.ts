@@ -25,14 +25,16 @@ export class CalendarPage implements OnInit {
 
   constructor(public navCtrl:NavController, private http:Http, eventSevice : EventService, gcal : GoogleCalendarService) {
 
-   this.eventSevice = eventSevice;
+    this.eventSevice = eventSevice;
     this.gcal = gcal;
 
     if (!LoginService.isConnected()) {
       this.navCtrl.push(LoginPage);
     }
 
-    window['analytics'].trackView("Calendar Page");
+    if(typeof window['analytics'] !== 'undefined') {
+      window['analytics'].trackView("Calendar Page");
+    }
 
   }
 
@@ -45,6 +47,9 @@ export class CalendarPage implements OnInit {
     if(!$this.eventSevice.loadLocalEvents()) {
       $this.eventSevice.loadEvents();
     }
+
+    $this.eventSevice.loadPhoneEvents();
+
     if(!$this.eventSevice.loadLocalGoogleEvents()){
       if($this.gcal.isGoogleLinked()) {
         $this.eventSevice.loadGoogleEvents();

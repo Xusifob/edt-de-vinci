@@ -23,10 +23,15 @@ export class SettingsPage {
 
         menu.title = 'Paramètres';
 
-        window['analytics'].trackView("Settings Page");
-
+        if(typeof window['analytics'] !== 'undefined') {
+            window['analytics'].trackView("Settings Page");
+        }
     }
 
+    syncPhone(sync): void {
+        this.gcal.sync(sync);
+        this.eventService.loadPhoneEvents();
+    }
 
     googlelogin(): void {
         this.gcal.login();
@@ -36,6 +41,8 @@ export class SettingsPage {
         console.log($event);
         localStorageService.setItem(localStorageService.WEEKEND_ID,$event.checked)
     }
+
+
 
 
     /**

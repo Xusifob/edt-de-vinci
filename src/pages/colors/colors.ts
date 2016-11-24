@@ -51,7 +51,7 @@ export class ColorsPage implements OnInit {
   /**
    * Group of selected color
    * @type {Array}
-     */
+   */
   groupColors : Object = {};
 
   constructor(eventSevice : EventService,menu : MenuService) {
@@ -65,18 +65,17 @@ export class ColorsPage implements OnInit {
       this.groupColors = group;
     }
 
-    window['analytics'].trackView("Colors Page");
-
+    if(typeof window['analytics'] !== 'undefined') {
+      window['analytics'].trackView("Colors Page");
+    }
   }
 
   ngOnInit() {
     var $this = this;
 
-    if(this.eventSevice.loadLocalEvents()){
+    this.eventSevice.loadEvents().then(function(){
       $this.extractGroups();
-    }else{
-      this.eventSevice.loadEvents().then($this.extractGroups);
-    }
+    });
 
   }
 
@@ -101,10 +100,10 @@ export class ColorsPage implements OnInit {
   deleteColor(group) : void {
 
 
-   // this.groupColors[group] = undefined;
+    // this.groupColors[group] = undefined;
 
 
-   // this.updateColors();
+    // this.updateColors();
 
   }
 

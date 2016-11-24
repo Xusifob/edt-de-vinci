@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 export class localStorageService {
 
     public static WEEKEND_ID = 'weekend';
+    public static PHONE_SYNC = 'phone_sync';
 
     /**
      * Set a localStorage item
