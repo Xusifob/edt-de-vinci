@@ -1,6 +1,8 @@
 import {Component, ElementRef, AfterViewInit, OnDestroy, DoCheck, Input, Output, EventEmitter, IterableDiffers} from '@angular/core';
 import {localStorageService} from "../../services/localstorage.service";
 import {MenuService} from "../../services/menu.service";
+import {TranslateService} from 'ng2-translate';
+
 declare var jQuery: any;
 
 @Component({
@@ -137,11 +139,13 @@ export class SchedulerComponent implements AfterViewInit, OnDestroy, DoCheck {
 
     elem: HTMLElement;
 
-    constructor(private el: ElementRef, differs: IterableDiffers,menu : MenuService) {
+    constructor(private el: ElementRef, differs: IterableDiffers,menu : MenuService, translate: TranslateService) {
         this.differ = differs.find([]).create(null);
         this.initialized = false;
 
         this.menu = menu;
+
+        this.locale = translate.getBrowserLang();
 
         var weekend = localStorageService.getItem(localStorageService.WEEKEND_ID);
 

@@ -1,6 +1,7 @@
 import { Component,ViewChild } from '@angular/core';
 import { Platform,Nav,MenuController,PopoverController } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
+import {TranslateService} from 'ng2-translate';
 
 import {LoginService} from "./services/login.service";
 import {CalendarPage} from "../pages/calendar/calendar.page";
@@ -34,7 +35,7 @@ export class MyApp {
   private admobId: any;
 
 
-  constructor(platform: Platform,menuCtrl : MenuController,menu : MenuService,public popoverCtrl: PopoverController) {
+  constructor(platform: Platform,menuCtrl : MenuController,menu : MenuService,public popoverCtrl: PopoverController,translate: TranslateService) {
 
     this.platform = platform;
     this.menu = menu;
@@ -46,6 +47,10 @@ export class MyApp {
 
       this.setupAdmob();
       this.setupAnalytics();
+      this.setupLang(translate);
+
+
+
 
       //this.setupAdnicube();
       this.setCompatibility();
@@ -126,6 +131,14 @@ export class MyApp {
 
   showBanner() {
     AdMob.showBanner(AdMob.AD_POSITION.BOTTOM_CENTER);
+  }
+
+  private setupLang(translate){
+
+    translate.setDefaultLang('fr');
+
+    var lang = translate.getBrowserLang();
+    translate.use(lang.match(/en|fr/) ? lang : 'fr');
   }
 
 

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ToastController } from 'ionic-angular';
-import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 import {LoginService} from "./login.service";
@@ -9,6 +8,7 @@ import {GoogleCalendarService} from "./gcalendar.service";
 
 import {MyEvent} from "../entity/event";
 import {SETTINGS} from '../../app/app.settings';
+import {TranslateService} from "ng2-translate";
 
 declare var Ical_parser: any;
 
@@ -17,9 +17,11 @@ declare var Ical_parser: any;
 export class EventService {
 
     gcal : GoogleCalendarService;
+    translate : TranslateService;
 
-    constructor(private http: Http, gcal : GoogleCalendarService,public toastCtrl: ToastController) {
+    constructor(gcal : GoogleCalendarService,public toastCtrl: ToastController,translate : TranslateService) {
         this.gcal = gcal;
+        this.translate = translate;
 
     }
 
@@ -27,7 +29,7 @@ export class EventService {
     public static EVENT_ID : string = 'events';
     public static GOOGLE_EVENT_ID : string = 'google_events';
     public static COLORS_ID : string = 'colors';
-    public static EVENT_GAP : number = 6;
+
 
     private static GOOGLE_COLORS : Object = {
         1 : '#9C27B0',
@@ -135,11 +137,16 @@ export class EventService {
                 $this.handleDevinciEvents(data);
                 resolve();
             }).catch(function () {
-                let toast = $this.toastCtrl.create({
-                    message: 'Erreur lors de la récupération des évènements',
-                    duration: 3000
-                });
-                toast.present();
+                $this.translate.get('ERROR_FETCH_EVENTS').subscribe(
+                    value => {
+                        let toast = $this.toastCtrl.create({
+                            message: value,
+                            duration: 3000
+                        });
+                        toast.present();
+                    }
+                );
+
                 if($this.dv_events.length == 0){
                     reject();
                 }else{
@@ -206,6 +213,7 @@ export class EventService {
      */
     private handleDevinciEvents(evts):void {
 
+        var $this = this;
         this.dv_events =  [];
 
         if(evts.length > 0 ) {
@@ -231,11 +239,15 @@ export class EventService {
 
             }
         }else{
-            let toast = this.toastCtrl.create({
-                message: 'Aucun évènement trouvé',
-                duration: 3000
-            });
-            toast.present();
+            $this.translate.get('ERROR_NO_EVENT_FOUND').subscribe(
+                value => {
+                    let toast = $this.toastCtrl.create({
+                        message: value,
+                        duration: 3000
+                    });
+                    toast.present();
+                }
+            );
         }
         this.saveEvents();
     }

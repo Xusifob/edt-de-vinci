@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {TranslateService} from "ng2-translate";
 
 
 @Injectable()
@@ -8,7 +9,11 @@ export class MenuService {
 
     private _page : string;
 
-    constructor() {
+    private translate;
+
+    constructor(translate: TranslateService) {
+    this.translate = translate;
+
     }
 
     get title():string {
@@ -17,7 +22,12 @@ export class MenuService {
 
 
     set title(value:string) {
-        this._title = value;
+
+        this.translate.get(value).subscribe(
+            value => {
+                this._title = value;
+            }
+        );
     }
 
 

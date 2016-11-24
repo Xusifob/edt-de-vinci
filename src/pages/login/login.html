@@ -8,7 +8,7 @@
     <form #f="ngForm" (ngSubmit)="doLogin()">
         <p>
             <ion-item>
-                <ion-label color="light" floating>Identifiant</ion-label>
+                <ion-label color="light" floating>{{ 'LOGIN_ID'|translate }}</ion-label>
                 <ion-input type="text"
                            name="login"
                            color="light"
@@ -19,7 +19,7 @@
         </p>
         <p>
             <ion-item>
-                <ion-label color="light" floating>Mot de passe</ion-label>
+                <ion-label color="light" floating>{{ 'PASSWORD'|translate }}</ion-label>
                 <ion-input type="password"
                            name="pass"
                            color="light"
@@ -28,7 +28,7 @@
             </ion-item>
         </p>
         <p>
-            <button ion-button color="secondary" block type="submit" [disabled]="!f.valid || inLogin">Se connecter</button>
+            <button ion-button color="secondary" block type="submit" [disabled]="!f.valid || inLogin">{{ 'LOGIN' | translate }}</button>
         </p>
     </form>
 </ion-content>
