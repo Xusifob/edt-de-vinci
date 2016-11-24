@@ -2,16 +2,19 @@ import { Injectable } from '@angular/core';
 import { localStorageService } from './localstorage.service';
 import { Headers, Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
+import {SETTINGS} from '../../app/app.settings';
+import { ToastController } from 'ionic-angular';
+
 
 @Injectable()
 export class LoginService {
 
     public static student_id : string = 'student_id';
-    loginUrl : string = 'http://localhost/annee_4/projects/edt-de-vinci/api/login.php';
+
     private headers = new Headers({'Content-Type': 'application/json'});
 
 
-    constructor(private http: Http) { }
+    constructor(private http: Http,public toastCtrl: ToastController) { }
 
     /**
      * Return if the user is connected
@@ -32,7 +35,10 @@ export class LoginService {
 
 
     login(user): Promise<Object> {
-        return this.http.post(this.loginUrl, {
+
+        var $this = this;
+
+        return this.http.post(SETTINGS.API_URL + 'login.php', {
                 pass: user.pass,
                 login: user.login,
             }, {headers: this.headers})
@@ -40,10 +46,10 @@ export class LoginService {
             .then(function(response){
                 var data = response.json();
 
-                console.log(data);
-
                 if(data.id){
                     localStorageService.setItem(LoginService.student_id,data.id);
+                }else{
+                    $this.handleError(data);
                 }
 
                 return data;
@@ -51,9 +57,17 @@ export class LoginService {
             .catch(this.handleError);
     }
 
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error); // for demo purposes only
-        return Promise.reject(error.message || error);
+    /**
+     * Display the toast error
+     * @param error
+     */
+    private handleError(error: any){
+
+        let toast = this.toastCtrl.create({
+            message: error.error,
+            duration: 3000
+        });
+        toast.present();
     }
 
 }

@@ -1,7 +1,11 @@
 export class MyEvent {
     id: number;
     title: string;
-    start: string;
-    end: string;
-    allDay: boolean = true;
+    start: Date;
+    end: Date;
+    allDay: boolean = false;
+    ediitable : boolean = false;
+    color : string = '#3f51b5';
+    location : string;
+    prof : string;
 }

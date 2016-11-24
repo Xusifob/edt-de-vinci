@@ -1,0 +1,26 @@
+<ion-content>
+    <ion-item>
+        <ion-label>Choisir un groupe</ion-label>
+        <ion-select [(ngModel)]="group">
+            <ion-option *ngFor="let group of groups" [value]="group">{{group}}</ion-option>
+        </ion-select>
+    </ion-item>
+    <div>
+        <ion-grid *ngIf="group" >
+            <ion-row wrap>
+                <ion-col *ngFor="let color of colors" width-33>
+                    <button ion-button (click)="selectColor(color)" [style.background-color]="color">{{ color }}</button>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </div>
+    <ion-list>
+        <ion-item *ngFor="let item of groupColors | keys">
+            <ion-icon name="color-palette" [style.color]="item.value" item-left></ion-icon>
+            {{item.key}}
+            <button ion-button clear (click)="deleteColor(item.key)" item-right>
+                <ion-icon name="trash"></ion-icon>
+            </button>
+        </ion-item>
+    </ion-list>
+</ion-content>

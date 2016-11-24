@@ -3,12 +3,14 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class localStorageService {
 
+    public static WEEKEND_ID = 'weekend';
+
     /**
      * Set a localStorage item
      * @param key
      * @param value
      */
-    public static setItem(key,value){
+    public static setItem(key,value) : void{
         value = JSON.stringify(value);
         localStorage.setItem(key,value);
     }
@@ -17,7 +19,7 @@ export class localStorageService {
      * Retrieve a localStorage item
      * @param key
      */
-    public static getItem(key){
+    public static getItem(key) : any{
         var value = localStorage.getItem(key);
 
         try{
@@ -32,6 +34,11 @@ export class localStorageService {
     public static removeItem(key){
         localStorage.removeItem(key);
 
+    }
+
+
+    public static flush(){
+        localStorage.clear();
     }
 
 }

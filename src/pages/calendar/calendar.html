@@ -1,4 +1,11 @@
-<edt-menu></edt-menu>
-<ion-content padding>
-  <p-schedule [events]="events"></p-schedule>
-</ion-content>
+<ds-scheduler
+        editable="false"
+        defaultView="agendaWeek"
+        [events]="eventSevice.events"
+        [defaultDate]="defaultDate"
+        slotLabelFormat="HH:mm"
+        resourceAreaWidth="120"
+        resourceLabelText="&nbsp;"
+        titleFormat="YYYY-MM-DD dddd"
+        nowIndicator="false"
+></ds-scheduler>

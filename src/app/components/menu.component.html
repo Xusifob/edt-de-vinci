@@ -1,11 +1,11 @@
-<ion-header color="primary">
+<ion-header color="primary" no-shadow>
 
     <ion-toolbar color="primary">
-        <button ion-button menuToggle left>
+        <button ion-button menuToggle left (click)="openMenu()">
             <ion-icon name="menu"></ion-icon>
         </button>
         <ion-title>
-            Calendar
+            {{ title }}
         </ion-title>
     </ion-toolbar>
 </ion-header>
@@ -17,8 +17,17 @@
     </ion-header>
     <ion-content>
         <ion-list>
+            <button ion-item (click)="openPage('calendar')">
+                <ion-icon name="calendar"></ion-icon> Calendrier
+            </button>
+            <button ion-item (click)="openPage('color')">
+                <ion-icon name="color-palette"></ion-icon> Couleur des évènements
+            </button>
+            <button ion-item (click)="openPage('settings')">
+                <ion-icon name="settings"></ion-icon> Paramètres
+            </button>
             <button ion-item (click)="openPage('logout')">
-                Logout
+                <ion-icon name="power"></ion-icon> Déconnexion
             </button>
         </ion-list>
     </ion-content>
