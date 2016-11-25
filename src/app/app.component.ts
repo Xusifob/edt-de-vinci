@@ -45,7 +45,9 @@ export class MyApp {
 
     platform.ready().then(() => {
 
-      this.setupAdmob();
+      if(LoginService.isConnected()){
+        this.setupAdmob();
+      }
       this.setupAnalytics();
       this.setupLang(translate);
 

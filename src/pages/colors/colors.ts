@@ -73,9 +73,13 @@ export class ColorsPage implements OnInit {
   ngOnInit() {
     var $this = this;
 
-    this.eventSevice.loadEvents().then(function(){
+    if(!this.eventSevice.loadLocalEvents()) {
+      this.eventSevice.loadEvents().then(function () {
+        $this.extractGroups();
+      });
+    }else{
       $this.extractGroups();
-    });
+    }
 
   }
 

@@ -6,6 +6,7 @@ export class localStorageService {
     public static WEEKEND_ID = 'weekend';
     public static PHONE_SYNC = 'phone_sync';
     public static USER = 'user';
+    public static SETTING_CALENDAR_PAGE = 'calendar_page';
 
     /**
      * Set a localStorage item

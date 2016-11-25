@@ -158,9 +158,14 @@ export class SchedulerComponent implements AfterViewInit, OnDestroy, DoCheck {
 
     ngAfterViewInit() {
 
-
         this.elem = this.el.nativeElement.children[0].children[1].children[1];
         this.schedule = jQuery(this.elem);
+
+        var page = localStorageService.getItem(localStorageService.SETTING_CALENDAR_PAGE);
+
+        if(page){
+            this.defaultView = page;
+        }
 
         this.locale = this.translate.getBrowserLang();
 
@@ -357,6 +362,7 @@ export class SchedulerComponent implements AfterViewInit, OnDestroy, DoCheck {
             .fullCalendar( 'changeView', view )
 
         this.createDate();
+        localStorageService.setItem(localStorageService.SETTING_CALENDAR_PAGE,view);
 
     }
 
