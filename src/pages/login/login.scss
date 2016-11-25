@@ -19,12 +19,19 @@ page-login.ion-page {
     background-color: $background;
     padding-left: 0;
     color: #fff;
+
+    &.item-select {
+      ion-label {
+        color: #fff;
+      }
+    }
   }
 
   .login--logo{
-    width: 70%;
+    max-width: 70%;
     margin: 25px auto 15px auto;
     display: block;
+    max-height: 100px;
   }
 
 }

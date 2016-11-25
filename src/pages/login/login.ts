@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { User } from '../../app/entity/user';
 import { LoginService } from '../../app/services/login.service';
 import { CalendarPage } from '../calendar/calendar.page';
@@ -36,7 +36,6 @@ export class LoginPage {
             $this.redirect();
             $this.inLogin = false;
         }).catch(function(message){
-
             $this.inLogin = false;
         })
     }

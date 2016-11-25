@@ -20,12 +20,12 @@ export class CalendarPage implements OnInit {
   resources:any[];
   defaultDate: any;
 
-  eventSevice : EventService;
+  eventService : EventService;
   gcal : GoogleCalendarService;
 
-  constructor(public navCtrl:NavController, private http:Http, eventSevice : EventService, gcal : GoogleCalendarService) {
+  constructor(public navCtrl:NavController, private http:Http, eventService : EventService, gcal : GoogleCalendarService) {
 
-    this.eventSevice = eventSevice;
+    this.eventService = eventService;
     this.gcal = gcal;
 
     if (!LoginService.isConnected()) {
@@ -44,16 +44,16 @@ export class CalendarPage implements OnInit {
     var $this = this;
 
     // Load from localstorage first
-    if(!$this.eventSevice.loadLocalEvents()) {
-      $this.eventSevice.loadEvents();
+    if(!$this.eventService.loadLocalEvents()) {
+      $this.eventService.loadEvents();
     }
+    $this.eventService.loadPhoneEvents();
 
-    $this.eventSevice.loadPhoneEvents();
 
-    if(!$this.eventSevice.loadLocalGoogleEvents()){
+   /* if(!$this.eventService.loadLocalGoogleEvents()){
       if($this.gcal.isGoogleLinked()) {
-        $this.eventSevice.loadGoogleEvents();
+        $this.eventService.loadGoogleEvents();
       }
-    }
+    }*/
   }
 }

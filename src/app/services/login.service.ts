@@ -46,12 +46,14 @@ export class LoginService {
         return this.http.post(SETTINGS.API_URL + 'login.php', {
                 pass: user.pass,
                 login: user.login,
+                school : user.school,
             }, {headers: this.headers})
             .toPromise()
             .then(function(response){
                 var data = response.json();
 
                 if(data.id){
+                    localStorageService.setItem(localStorageService.USER,user)
                     localStorageService.setItem(LoginService.student_id,data.id);
                 }else{
                     $this.handleError(data);

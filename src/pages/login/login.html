@@ -1,11 +1,21 @@
 <ion-content padding>
 
-    <img src="assets/img/leonard-de-vinci.png" alt="Logo" class="login--logo">
+    <img [src]="'assets/img/'+ user.school +'.png'" *ngIf="user.school" alt="Logo" class="login--logo">
 
 
     <ion-spinner *ngIf="inLogin" color="light" name="crescent"></ion-spinner>
 
     <form #f="ngForm" (ngSubmit)="doLogin()">
+
+        <ion-item >
+            <ion-label>{{"SELECT_SCHOOL"| translate}}</ion-label>
+            <ion-select required [(ngModel)]="user.school" name="school">
+                <ion-option value="bcit">{{"BCIT" | translate}}</ion-option>
+                <ion-option value="devinci">{{"PULV" | translate}}</ion-option>
+            </ion-select>
+        </ion-item>
+
+
         <p>
             <ion-item>
                 <ion-label color="light" floating>{{ 'LOGIN_ID'|translate }}</ion-label>
