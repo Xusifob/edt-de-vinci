@@ -99,6 +99,7 @@ export class EventService {
      * Load the events from localstorage
      */
     public loadLocalEvents(){
+
         var evts = localStorageService.getItem(EventService.EVENT_ID);
 
         if(evts && evts.events){
@@ -232,9 +233,9 @@ export class EventService {
      */
     public reload(){
         this.loadEvents();
-       /* if(this.gcal.isGoogleLinked()) {
-            this.loadGoogleEvents();
-        }*/
+        /* if(this.gcal.isGoogleLinked()) {
+         this.loadGoogleEvents();
+         }*/
         this.loadPhoneEvents();
     }
 
@@ -246,21 +247,20 @@ export class EventService {
      * @returns {boolean}
      */
     private createEventFromBCIT(evt){
-        var start = new Date(evt.start);
-        var end = new Date(evt.start);
 
-        if(!this.isInOffset(start))
+        if(!this.isInOffset(evt.start))
             return false;
 
         var event = new MyEvent();
         event.title = evt.title;
-        event.start = start;
-        event.end = end;
+        event.start = evt.start;
+        event.end = evt.end;
         event.location = evt.location ? evt.location : '';
         event.prof = evt.type ? evt.type : '';
 
         var event_tmp = JSON.stringify(event);
         event = JSON.parse(event_tmp);
+
         this.dv_events.push(event);
     }
 
@@ -273,7 +273,8 @@ export class EventService {
         var start = new Date(evt.DTSTART);
         var end = new Date(evt.DTEND);
 
-        if(!this.isInOffset(start))
+
+        if(!this.isInOffset(evt.DTSTART))
             return false;
 
         var event = new MyEvent();
@@ -282,6 +283,8 @@ export class EventService {
         event.end = end;
         event.location = evt.LOCATION ? evt.LOCATION : '';
         event.prof = evt.PROF ? evt.PROF : '';
+
+        this.dv_events.push(event);
     }
 
     /**
@@ -403,16 +406,21 @@ export class EventService {
     /**
      *
      * @param start Date
+     * @param isTimestamp Boolean
      */
-    isInOffset(start) : boolean{
+    isInOffset(start,isTimestamp = false) : boolean{
 
         var timeStampOffset = SETTINGS.EVENT_OFFSET*30*24*60*60*1000;
 
         var now = new Date().getTime();
 
-        if(start.getTime() > now + timeStampOffset)
+        if(!isTimestamp)
+            start = new Date(start).getTime();
+
+
+        if(start > now + timeStampOffset)
             return false;
-        if(start.getTime() < now - timeStampOffset)
+        if(start < now - timeStampOffset)
             return false;
 
         return true;

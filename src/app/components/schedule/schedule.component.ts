@@ -165,6 +165,7 @@ export class SchedulerComponent implements AfterViewInit, OnDestroy, DoCheck {
         this.locale = this.translate.getBrowserLang();
 
         this.schedule.fullCalendar({
+            timestamp : 'local',
             schedulerLicenseKey: this.apiKey,
             resources: this.resources,
             resourceAreaWidth: this.resourceAreaWidth,
