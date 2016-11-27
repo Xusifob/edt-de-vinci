@@ -2,6 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import { NavController } from 'ionic-angular';
+import { GoogleAnalytics } from 'ionic-native';
 
 import { LoginService } from '../../app/services/login.service';
 import { EventService } from '../../app/services/event.service';
@@ -16,12 +17,9 @@ import { LoginPage } from '../login/login';
 })
 export class CalendarPage implements OnInit {
 
-  events:any [];
-  resources:any[];
-  defaultDate: any;
-
   eventService : EventService;
   gcal : GoogleCalendarService;
+  defaultDate : any;
 
   constructor(public navCtrl:NavController, private http:Http, eventService : EventService, gcal : GoogleCalendarService) {
 
@@ -35,11 +33,11 @@ export class CalendarPage implements OnInit {
     if(typeof window['analytics'] !== 'undefined') {
       window['analytics'].trackView("Calendar Page");
     }
+    GoogleAnalytics.trackView("Calendar Page");
 
   }
 
   ngOnInit() {
-
 
     var $this = this;
 

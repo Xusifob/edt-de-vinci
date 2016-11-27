@@ -23,3 +23,7 @@ ion-nav{
 ion-app{
   background-color: map-get($colors, 'primary') !important;
 }
+
+.fixed-content, .scroll-content{
+  padding-bottom: 56px !important;
+}

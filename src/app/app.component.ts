@@ -2,11 +2,13 @@ import { Component,ViewChild } from '@angular/core';
 import { Platform,Nav,MenuController,PopoverController } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 import {TranslateService} from 'ng2-translate';
+import { GoogleAnalytics } from 'ionic-native';
 
 import {LoginService} from "./services/login.service";
 import {CalendarPage} from "../pages/calendar/calendar.page";
 import {localStorageService} from "../../.tmp/app/services/localstorage.service";
 import {MenuService} from "./services/menu.service";
+import { GoogleAnalyticsService   } from './services/analytics.service';
 
 import { LoginPage } from '../pages/login/login';
 import {SettingsPage} from "../pages/settings/settings";
@@ -14,6 +16,7 @@ import { LogoutPage } from '../pages/logout/logout';
 import {ColorsPage} from "../pages/colors/colors";
 import {ListPage} from "../pages/list/list.page";
 
+import {SETTINGS} from './app.settings';
 import Popover from "./components/popover/popover";
 
 
@@ -33,14 +36,16 @@ export class MyApp {
   login;
   platform;
   private admobId: any;
+  public analytics;
 
 
-  constructor(platform: Platform,menuCtrl : MenuController,menu : MenuService,public popoverCtrl: PopoverController,translate: TranslateService) {
+  constructor(platform: Platform,menuCtrl : MenuController,menu : MenuService,public popoverCtrl: PopoverController,translate: TranslateService, analytics : GoogleAnalyticsService) {
 
     this.platform = platform;
     this.menu = menu;
     this.menuCtrl = menuCtrl;
     this.login = LoginService;
+    this.analytics = analytics;
 
 
     platform.ready().then(() => {
@@ -96,9 +101,18 @@ export class MyApp {
   }
 
   private setupAnalytics(){
-    if(window['analytics']) {
-      window['analytics'].startTrackerWithId("UA-45967162-6");
-    }
+
+    this.analytics.trackView('Launch App');
+
+   // if(window['analytics']) {
+   //   window['analytics'].startTrackerWithId(SETTINGS.ANALYTICS_ID);
+   // }
+//
+   // GoogleAnalytics.debugMode();
+   // GoogleAnalytics.startTrackerWithId(SETTINGS.ANALYTICS_ID);
+//
+   // GoogleAnalytics.enableUncaughtExceptionReporting(true)
+
   }
 
   private setupAdnicube(){

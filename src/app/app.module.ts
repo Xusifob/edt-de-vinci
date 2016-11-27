@@ -21,6 +21,7 @@ import { LoginService } from './services/login.service';
 import { EventService } from './services/event.service';
 import { localStorageService } from './services/localstorage.service';
 import { GoogleCalendarService   } from './services/gcalendar.service';
+import { GoogleAnalyticsService   } from './services/analytics.service';
 
 
 // Components
@@ -76,6 +77,7 @@ enableProdMode();
     EventService,
     GoogleCalendarService,
     MenuService,
+    GoogleAnalyticsService,
   ],
 })
 export class AppModule {}
