@@ -12,7 +12,7 @@ export class MenuService {
     private translate;
 
     constructor(translate: TranslateService) {
-    this.translate = translate;
+        this.translate = translate;
         this.title = 'calendar';
 
     }
@@ -22,9 +22,12 @@ export class MenuService {
     }
 
 
-    set title(value:string) {
+    set title(key:string) {
 
-        this.translate.get(value).subscribe(
+        if(typeof key == 'undefined')
+            return;
+
+        this.translate.get(key).subscribe(
             value => {
                 this._title = value;
             }

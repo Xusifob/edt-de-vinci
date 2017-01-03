@@ -65,7 +65,7 @@ export class MyApp {
 
       if(LoginService.isConnected()){
         this.menu.page = 'calendar';
-        this.nav.push(CalendarPage);
+        this.nav.push(ColorsPage);
       }else{
         this.menu.page = 'login';
         this.nav.push(LoginPage);

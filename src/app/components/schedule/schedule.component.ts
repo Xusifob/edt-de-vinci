@@ -368,6 +368,9 @@ export class SchedulerComponent implements AfterViewInit, OnDestroy, DoCheck {
 
 
     onSwipe(event) : void {
+
+        console.log(event);
+
         switch (event.direction){
             case SchedulerComponent.SWIPE_RIGHT :
                 this.schedule.fullCalendar( 'next' );

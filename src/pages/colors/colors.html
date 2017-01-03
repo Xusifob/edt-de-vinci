@@ -15,10 +15,10 @@
         </ion-grid>
     </div>
     <ion-list>
-        <ion-item *ngFor="let item of groupColors | keys">
+        <ion-item *ngFor="let item of groupColorArray">
             <ion-icon name="color-palette" [style.color]="item.value" item-left></ion-icon>
-            {{item.key}}
-            <button ion-button clear (click)="deleteColor(item.key)" item-right>
+            <span [style.color]="item.value">{{item.key}}</span>
+            <button  [style.color]="item.value" ion-button (click)="deleteColor(item.key)" clear item-right>
                 <ion-icon name="trash"></ion-icon>
             </button>
         </ion-item>
