@@ -128,7 +128,7 @@ export class MyApp {
   private setCompatibility(){
     var oldId = localStorage.getItem('studentId');
     if(oldId){
-      localStorageService.setItem(LoginService.student_id,oldId);
+      //localStorageService.setItem(LoginService.student_id,oldId);
       localStorageService.removeItem('studentId');
     }
   }
