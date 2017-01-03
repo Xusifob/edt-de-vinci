@@ -2,7 +2,7 @@ import { Component,ViewChild } from '@angular/core';
 import { Platform,Nav,MenuController,PopoverController } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 import {TranslateService} from 'ng2-translate';
-import { GoogleAnalytics } from 'ionic-native';
+//import { GoogleAnalytics } from 'ionic-native';
 
 import {LoginService} from "./services/login.service";
 import {CalendarPage} from "../pages/calendar/calendar.page";
@@ -12,12 +12,11 @@ import { GoogleAnalyticsService   } from './services/analytics.service';
 
 import { LoginPage } from '../pages/login/login';
 import {SettingsPage} from "../pages/settings/settings";
-import { LogoutPage } from '../pages/logout/logout';
+import {LogoutPage } from '../pages/logout/logout';
 import {ColorsPage} from "../pages/colors/colors";
 import {ListPage} from "../pages/list/list.page";
 
-import {SETTINGS} from './app.settings';
-import Popover from "./components/popover/popover";
+import { Popover } from "./components/popover/popover";
 
 
 declare var adincube : any;
@@ -52,6 +51,7 @@ export class MyApp {
 
       if(LoginService.isConnected()){
         this.setupAdmob();
+        this.setupAdnicube();
       }
       this.setupAnalytics();
       this.setupLang(translate);
@@ -59,13 +59,12 @@ export class MyApp {
 
 
 
-      //this.setupAdnicube();
       this.setCompatibility();
 
 
       if(LoginService.isConnected()){
         this.menu.page = 'calendar';
-        this.nav.push(ColorsPage);
+        this.nav.push(CalendarPage);
       }else{
         this.menu.page = 'login';
         this.nav.push(LoginPage);
