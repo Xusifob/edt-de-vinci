@@ -2,7 +2,6 @@ import { Component,ViewChild } from '@angular/core';
 import { Platform,Nav,MenuController,PopoverController } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 import {TranslateService} from 'ng2-translate';
-import { GoogleAnalytics } from 'ionic-native';
 
 import {LoginService} from "./services/login.service";
 import {CalendarPage} from "../pages/calendar/calendar.page";
@@ -12,12 +11,11 @@ import { GoogleAnalyticsService   } from './services/analytics.service';
 
 import { LoginPage } from '../pages/login/login';
 import {SettingsPage} from "../pages/settings/settings";
-import { LogoutPage } from '../pages/logout/logout';
+import {LogoutPage } from '../pages/logout/logout';
 import {ColorsPage} from "../pages/colors/colors";
 import {ListPage} from "../pages/list/list.page";
 
-import {SETTINGS} from './app.settings';
-import Popover from "./components/popover/popover";
+import { Popover } from "./components/popover/popover";
 
 
 declare var adincube : any;
@@ -51,24 +49,19 @@ export class MyApp {
     platform.ready().then(() => {
 
       if(LoginService.isConnected()){
-        this.setupAdmob();
+        //   this.setupAdmob();
+        this.setupAdnicube();
       }
-      this.setupAnalytics();
       this.setupLang(translate);
 
 
-
-
-      //this.setupAdnicube();
       this.setCompatibility();
 
 
       if(LoginService.isConnected()){
-        this.menu.page = 'calendar';
-        this.nav.push(CalendarPage);
+        this.openPage('calendar');
       }else{
-        this.menu.page = 'login';
-        this.nav.push(LoginPage);
+        this.openPage('login');
       }
 
 
@@ -100,20 +93,6 @@ export class MyApp {
     this.createBanner();
   }
 
-  private setupAnalytics(){
-
-    this.analytics.trackView('Launch App');
-
-   // if(window['analytics']) {
-   //   window['analytics'].startTrackerWithId(SETTINGS.ANALYTICS_ID);
-   // }
-//
-   // GoogleAnalytics.debugMode();
-   // GoogleAnalytics.startTrackerWithId(SETTINGS.ANALYTICS_ID);
-//
-   // GoogleAnalytics.enableUncaughtExceptionReporting(true)
-
-  }
 
   private setupAdnicube(){
     try {
@@ -129,7 +108,7 @@ export class MyApp {
   private setCompatibility(){
     var oldId = localStorage.getItem('studentId');
     if(oldId){
-      localStorageService.setItem(LoginService.student_id,oldId);
+      //localStorageService.setItem(LoginService.student_id,oldId);
       localStorageService.removeItem('studentId');
     }
   }
@@ -158,11 +137,20 @@ export class MyApp {
   }
 
 
+  /**
+   *
+   * @param page
+   */
   openPage(page): void {
 
     this.menu.page = page;
 
+    GoogleAnalyticsService.trackView(page);
+
     switch (page){
+      case 'login' :
+        this.nav.push(LoginPage);
+        break;
       case 'logout' :
         this.nav.push(LogoutPage);
         break;

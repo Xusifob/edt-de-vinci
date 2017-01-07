@@ -37,7 +37,15 @@ ds-scheduler {
     }
 
   }
+}
 
+.calendar--swiper{
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 100px;
+  bottom: 0;
+  z-index: 99;
 }
 
 

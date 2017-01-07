@@ -52,7 +52,15 @@ export class ColorsPage implements OnInit {
    * Group of selected color
    * @type {Array}
    */
-  groupColors : Object = {};
+  private _groupColors : Object = {};
+
+
+  /**
+   * Group of colors as an array
+   *
+   * @type {Array}
+   */
+  public groupColorArray : Object[] = [];
 
   constructor(eventSevice : EventService,menu : MenuService) {
 
@@ -62,7 +70,9 @@ export class ColorsPage implements OnInit {
     this.eventSevice = eventSevice;
     var group = localStorageService.getItem(EventService.COLORS_ID);
     if(group != null && typeof group === 'object'){
+
       this.groupColors = group;
+
     }
 
     if(typeof window['analytics'] !== 'undefined') {
@@ -95,22 +105,55 @@ export class ColorsPage implements OnInit {
 
   selectColor(color) : void {
 
-    this.groupColors[this.group] = color;
+    this._groupColors[this.group] = color;
     this.group = '';
 
     this.updateColors();
   }
 
+
   deleteColor(group) : void {
 
+    console.log(group);
 
-    // this.groupColors[group] = undefined;
+    delete this.groupColors[group];
 
-
-    // this.updateColors();
+     this.updateColors();
 
   }
 
+
+  get groupColors():Object {
+    this.updateColorArray();
+    return this._groupColors;
+
+  }
+
+  set groupColors(value:Object){
+
+    this._groupColors=value;
+
+    this.updateColorArray();
+
+  }
+
+
+
+  private updateColorArray()
+  {
+    this.groupColorArray =  [];
+    for(var key in this._groupColors) {
+      this.groupColorArray.push({
+        "key" : key,
+        "value" : this._groupColors[key],
+      });
+    }
+  }
+
+
+  /**
+   *
+   */
   private updateColors(){
     localStorageService.setItem(EventService.COLORS_ID,this.groupColors);
 

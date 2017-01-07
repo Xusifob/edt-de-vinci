@@ -4,6 +4,7 @@ import { ToastController } from 'ionic-angular';
 import {LoginService} from "./login.service";
 import {localStorageService} from "./localstorage.service";
 import {GoogleCalendarService} from "./gcalendar.service";
+import { GoogleAnalyticsService   } from './analytics.service';
 
 import {MyEvent} from "../entity/event";
 import {SETTINGS} from '../../app/app.settings';
@@ -149,6 +150,8 @@ export class EventService {
         var $this = this;
 
         this.user = localStorageService.getItem(localStorageService.USER);
+
+        GoogleAnalyticsService.trackEvent('loading','loading','school',this.user.school);
 
         switch (this.user.school) {
             case 'devinci' :
