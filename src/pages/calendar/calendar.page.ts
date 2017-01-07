@@ -2,7 +2,6 @@ import { Component, OnInit} from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import { NavController } from 'ionic-angular';
-import { GoogleAnalytics } from 'ionic-native';
 
 import { LoginService } from '../../app/services/login.service';
 import { EventService } from '../../app/services/event.service';
@@ -29,11 +28,6 @@ export class CalendarPage implements OnInit {
     if (!LoginService.isConnected()) {
       this.navCtrl.push(LoginPage);
     }
-
-    if(typeof window['analytics'] !== 'undefined') {
-      window['analytics'].trackView("Calendar Page");
-    }
-    GoogleAnalytics.trackView("Calendar Page");
 
   }
 
