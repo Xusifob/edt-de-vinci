@@ -30,10 +30,6 @@ export class CalendarPage implements OnInit {
       this.navCtrl.push(LoginPage);
     }
 
-    if(typeof window['analytics'] !== 'undefined') {
-      window['analytics'].trackView("Calendar Page");
-    }
-    GoogleAnalytics.trackView("Calendar Page");
 
   }
 

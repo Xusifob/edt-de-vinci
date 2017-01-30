@@ -47,6 +47,7 @@ export class LoginService {
                 pass: user.pass,
                 login: user.login,
                 school : user.school,
+                oldWay : user.oldWay
             }, {headers: this.headers})
             .toPromise()
             .then(function(response){
@@ -63,6 +64,8 @@ export class LoginService {
             })
             .catch(this.handleError);
     }
+
+
 
     /**
      * Display the toast error

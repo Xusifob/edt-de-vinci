@@ -51,7 +51,7 @@ export class MyApp {
 
       if(LoginService.isConnected()){
         this.setupAdmob();
-        this.setupAdnicube();
+   //     this.setupAdnicube();
       }
       this.setupAnalytics();
       this.setupLang(translate);

@@ -28,14 +28,22 @@
             </ion-item>
         </p>
         <p>
-            <ion-item>
+            <ion-item  *ngIf="!user.oldWay" >
                 <ion-label color="light" floating>{{ 'PASSWORD'|translate }}</ion-label>
-                <ion-input type="password"
-                           name="pass"
-                           color="light"
-                           [(ngModel)]="user.pass" required>
+                <ion-input
+                        type="password"
+                        name="pass"
+                        color="light"
+                        [(ngModel)]="user.pass" required>
                 </ion-input>
             </ion-item>
+        </p>
+        <p>
+            <ion-item *ngIf="user.school == 'devinci'">
+                <ion-label>{{ 'OLD_CONNECTION'|translate }}</ion-label>
+                <ion-checkbox name="oldWay" [(ngModel)]="user.oldWay" color="royal"></ion-checkbox>
+            </ion-item>
+
         </p>
         <p>
             <button ion-button color="secondary" block type="submit" [disabled]="!f.valid || inLogin">{{ 'LOGIN' | translate }}</button>

@@ -25,5 +25,6 @@
   "COLOR_PAGE" : "Couleurs",
   "SELECT_SCHOOL" : "Séléctionnez votre école",
   "BCIT" : "BCIT",
-  "PULV" : "Pôle léonard de vinci"
+  "PULV" : "Pôle léonard de vinci",
+  "OLD_CONNECTION" : "Utiliser les anciens identifiants"
 }
